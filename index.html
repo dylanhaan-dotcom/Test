@@ -473,47 +473,72 @@
     selectedBlock = null;
   }
 
-  // --- Touch support ---
+  // --- Touch drag support ---
+  // Only activates on swipe; simple taps fall through to click-to-select
   let touchClone = null;
   let touchOffsetX = 0;
   let touchOffsetY = 0;
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchDragging = false;
+  const DRAG_THRESHOLD = 10; // px of movement before drag activates
 
   function onTouchStart(e) {
     const touch = e.touches[0];
-    draggedBlock = e.target.closest(".block");
-    if (!draggedBlock) return;
+    const block = e.target.closest(".block");
+    if (!block) return;
 
-    const rect = draggedBlock.getBoundingClientRect();
+    draggedBlock = block;
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+    touchDragging = false;
+
+    const rect = block.getBoundingClientRect();
     touchOffsetX = touch.clientX - rect.left;
     touchOffsetY = touch.clientY - rect.top;
-
-    touchClone = draggedBlock.cloneNode(true);
-    touchClone.style.position = "fixed";
-    touchClone.style.zIndex = "9999";
-    touchClone.style.width = rect.width + "px";
-    touchClone.style.pointerEvents = "none";
-    touchClone.style.opacity = "0.85";
-    touchClone.style.left = (touch.clientX - touchOffsetX) + "px";
-    touchClone.style.top = (touch.clientY - touchOffsetY) + "px";
-    document.body.appendChild(touchClone);
-
-    draggedBlock.classList.add("dragging");
-    e.preventDefault();
   }
 
   function onTouchMove(e) {
-    if (!touchClone) return;
+    if (!draggedBlock) return;
     const touch = e.touches[0];
+
+    // Start dragging only after finger moves past threshold
+    if (!touchDragging) {
+      const dx = touch.clientX - touchStartX;
+      const dy = touch.clientY - touchStartY;
+      if (Math.abs(dx) < DRAG_THRESHOLD && Math.abs(dy) < DRAG_THRESHOLD) return;
+
+      touchDragging = true;
+      const rect = draggedBlock.getBoundingClientRect();
+      touchClone = draggedBlock.cloneNode(true);
+      touchClone.style.position = "fixed";
+      touchClone.style.zIndex = "9999";
+      touchClone.style.width = rect.width + "px";
+      touchClone.style.pointerEvents = "none";
+      touchClone.style.opacity = "0.85";
+      document.body.appendChild(touchClone);
+      draggedBlock.classList.add("dragging");
+    }
+
+    e.preventDefault();
     touchClone.style.left = (touch.clientX - touchOffsetX) + "px";
     touchClone.style.top = (touch.clientY - touchOffsetY) + "px";
-    e.preventDefault();
   }
 
   function onTouchEnd(e) {
-    if (!touchClone || !draggedBlock) return;
+    if (!draggedBlock) return;
+
+    // If no drag happened, let the click event handle it (tap = select)
+    if (!touchDragging) {
+      draggedBlock = null;
+      return;
+    }
+
     const touch = e.changedTouches[0];
-    touchClone.remove();
-    touchClone = null;
+    if (touchClone) {
+      touchClone.remove();
+      touchClone = null;
+    }
 
     const site = document.getElementById("buildSite");
     const yard = document.getElementById("blockYard");
@@ -534,6 +559,7 @@
     draggedBlock.classList.remove("dragging");
     clearFeedback();
     draggedBlock = null;
+    touchDragging = false;
   }
 
   // --- Game logic ---
