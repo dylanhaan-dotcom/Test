@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Build a House — Block Stacking Game</title>
+  <title>Build a House — Bidding Game</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -19,119 +19,274 @@
     }
 
     h1 {
-      margin-top: 20px;
+      margin-top: 16px;
       color: #2c3e50;
-      font-size: 1.8rem;
+      font-size: 1.7rem;
       text-shadow: 1px 1px 2px rgba(255,255,255,0.6);
     }
 
     .instructions {
       color: #34495e;
-      margin: 6px 16px 12px;
-      font-size: 0.9rem;
+      margin: 4px 16px 10px;
+      font-size: 0.85rem;
       text-align: center;
       max-width: 400px;
       line-height: 1.4;
     }
 
-    /* === Stack area === */
+    /* === Budget bar === */
+    .budget-bar {
+      width: 100%;
+      max-width: 380px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 10px 16px;
+      margin: 0 16px 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .budget-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 6px;
+    }
+
+    .budget-track {
+      width: 100%;
+      height: 14px;
+      background: #ecf0f1;
+      border-radius: 7px;
+      overflow: hidden;
+    }
+
+    .budget-fill {
+      height: 100%;
+      border-radius: 7px;
+      background: #27ae60;
+      transition: width 0.4s ease, background 0.4s ease;
+    }
+
+    .budget-fill.warning { background: #f39c12; }
+    .budget-fill.over { background: #e74c3c; }
+
+    .budget-remaining {
+      text-align: right;
+      font-size: 0.75rem;
+      color: #7f8c8d;
+      margin-top: 4px;
+    }
+
+    /* === Stack (built house) === */
     .stack {
       width: 100%;
-      max-width: 360px;
-      min-height: 60px;
+      max-width: 380px;
       display: flex;
       flex-direction: column-reverse;
       align-items: center;
-      padding: 8px 16px;
-      gap: 4px;
-      margin-bottom: 8px;
+      padding: 4px 16px;
+      gap: 3px;
+      min-height: 20px;
     }
 
     .ground-line {
       width: 100%;
-      max-width: 340px;
+      max-width: 360px;
       height: 4px;
       background: #6B4226;
       border-radius: 2px;
+      margin-bottom: 10px;
     }
 
-    /* === Available blocks === */
-    .available {
+    .stacked-block {
       width: 100%;
       max-width: 360px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 6px;
-      padding: 8px 16px;
-    }
-
-    /* === Blocks === */
-    .block {
-      padding: 10px 14px;
-      border-radius: 6px;
+      padding: 7px 12px;
+      border-radius: 5px;
       font-weight: 600;
-      font-size: 0.82rem;
-      text-align: center;
-      cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
-      border: 2px solid rgba(0,0,0,0.15);
+      font-size: 0.75rem;
       color: #fff;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+      border: 2px solid rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      animation: slideIn 0.3s ease;
     }
 
-    .block:active {
-      transform: scale(0.96);
+    .stacked-block .tier-badge {
+      font-size: 0.65rem;
+      background: rgba(0,0,0,0.2);
+      padding: 2px 8px;
+      border-radius: 10px;
     }
 
-    .block.stacked {
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* === Current trade bidding === */
+    .bid-section {
       width: 100%;
-      max-width: 340px;
+      max-width: 380px;
+      padding: 0 16px;
+      margin-top: 8px;
     }
 
-    .block-icon {
-      margin-right: 6px;
-    }
-
-    .block.correct {
-      border-color: #27ae60;
-      box-shadow: 0 0 8px rgba(39, 174, 96, 0.5);
-    }
-
-    .block.incorrect {
-      border-color: #e74c3c;
-      box-shadow: 0 0 8px rgba(231, 76, 60, 0.5);
-      animation: shake 0.4s ease;
-    }
-
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      20% { transform: translateX(-6px); }
-      40% { transform: translateX(6px); }
-      60% { transform: translateX(-4px); }
-      80% { transform: translateX(4px); }
-    }
-
-    /* === Divider === */
-    .divider {
-      width: 100%;
-      max-width: 340px;
+    .trade-label {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #2c3e50;
       text-align: center;
-      color: #5a6a5a;
-      font-size: 0.8rem;
-      margin: 4px 0;
-      font-weight: 600;
+      margin-bottom: 8px;
     }
+
+    .trade-step {
+      font-size: 0.75rem;
+      color: #7f8c8d;
+      font-weight: 400;
+    }
+
+    .bid-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .bid-card {
+      padding: 12px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 2px solid rgba(0,0,0,0.08);
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .bid-card:active { transform: scale(0.98); }
+    .bid-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.15); }
+
+    .bid-card.low { background: #f0f4f0; }
+    .bid-card.med { background: #eef2f7; }
+    .bid-card.high { background: #fdf2ec; }
+
+    .bid-card.low:hover { border-color: #27ae60; }
+    .bid-card.med:hover { border-color: #3498db; }
+    .bid-card.high:hover { border-color: #e67e22; }
+
+    .bid-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .bid-tier {
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #2c3e50;
+    }
+
+    .bid-desc {
+      font-size: 0.75rem;
+      color: #666;
+      line-height: 1.3;
+    }
+
+    .bid-price {
+      font-weight: 700;
+      font-size: 1rem;
+      white-space: nowrap;
+      margin-left: 12px;
+    }
+
+    .bid-card.low .bid-price { color: #27ae60; }
+    .bid-card.med .bid-price { color: #2980b9; }
+    .bid-card.high .bid-price { color: #d35400; }
+
+    /* === Results === */
+    .results {
+      display: none;
+      width: 100%;
+      max-width: 380px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .results.show { display: block; }
+
+    .results h2 {
+      color: #2c3e50;
+      font-size: 1.3rem;
+      margin-bottom: 6px;
+    }
+
+    .result-icon {
+      font-size: 3rem;
+      margin-bottom: 4px;
+    }
+
+    .result-summary {
+      font-size: 0.9rem;
+      color: #34495e;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .quality-bar {
+      width: 100%;
+      height: 18px;
+      background: #ecf0f1;
+      border-radius: 9px;
+      overflow: hidden;
+      margin: 6px 0;
+    }
+
+    .quality-fill {
+      height: 100%;
+      border-radius: 9px;
+      transition: width 0.6s ease;
+    }
+
+    .quality-label {
+      font-size: 0.8rem;
+      color: #7f8c8d;
+      margin-bottom: 10px;
+    }
+
+    .breakdown {
+      text-align: left;
+      font-size: 0.75rem;
+      color: #555;
+      margin-top: 12px;
+    }
+
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .breakdown-row .tier-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+
+    .tier-dot.low { background: #27ae60; }
+    .tier-dot.med { background: #3498db; }
+    .tier-dot.high { background: #e67e22; }
 
     /* === Buttons === */
-    .btn-row {
-      display: flex;
-      gap: 10px;
-      margin: 12px 0;
-    }
-
     button {
-      padding: 10px 20px;
+      padding: 10px 24px;
       border: none;
       border-radius: 6px;
       font-size: 0.9rem;
@@ -142,219 +297,318 @@
 
     button:active { transform: scale(0.96); }
 
-    .btn-check { background: #27ae60; color: #fff; }
-    .btn-check:hover { background: #219a52; }
-    .btn-reset { background: #e67e22; color: #fff; }
+    .btn-reset { background: #e67e22; color: #fff; margin-top: 12px; }
     .btn-reset:hover { background: #cf6d17; }
-    .btn-hint { background: #3498db; color: #fff; }
-    .btn-hint:hover { background: #2980b9; }
-
-    /* === Feedback === */
-    .feedback {
-      margin: 8px 16px;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      text-align: center;
-      max-width: 400px;
-    }
-
-    .feedback:empty { display: none; }
-    .feedback.success { background: #d4edda; color: #155724; border: 2px solid #27ae60; }
-    .feedback.error { background: #f8d7da; color: #721c24; border: 2px solid #e74c3c; }
-    .feedback.info { background: #d1ecf1; color: #0c5460; border: 2px solid #17a2b8; }
-
-    /* === Celebration === */
-    .celebration { display: none; flex-direction: column; align-items: center; gap: 6px; }
-    .celebration.show { display: flex; }
-    .house-icon { font-size: 3.5rem; animation: bounce 0.6s ease infinite alternate; }
-    @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
-
-    .score { color: #2c3e50; font-size: 0.85rem; margin-top: 4px; }
   </style>
 </head>
 <body>
 
 <h1>Build a House</h1>
 <p class="instructions">
-  Tap a block to stack it. Tap a stacked block to remove it.
-  Stack all 15 trades in the correct order from bottom to top!
+  You have a budget to build a house. For each trade, pick a low, standard, or
+  premium bid. Spend wisely — stay under budget while building the best home you can!
 </p>
+
+<div class="budget-bar">
+  <div class="budget-header">
+    <span id="spent">Spent: $0</span>
+    <span id="budgetTotal">Budget: $250,000</span>
+  </div>
+  <div class="budget-track">
+    <div class="budget-fill" id="budgetFill" style="width: 0%"></div>
+  </div>
+  <div class="budget-remaining" id="remaining">$250,000 remaining</div>
+</div>
 
 <div class="stack" id="stack"></div>
 <div class="ground-line"></div>
 
-<div class="divider" id="dividerLabel">--- tap a block to stack it ---</div>
+<div class="bid-section" id="bidSection"></div>
 
-<div class="available" id="available"></div>
-
-<div class="btn-row">
-  <button class="btn-check" onclick="checkOrder()">Check Order</button>
-  <button class="btn-hint" onclick="showHint()">Hint</button>
-  <button class="btn-reset" onclick="resetGame()">Reset</button>
-</div>
-
-<div class="feedback" id="feedback"></div>
-
-<div class="celebration" id="celebration">
-  <div class="house-icon">🏠</div>
-  <strong style="font-size:1.2rem; color:#155724;">You built the house!</strong>
-</div>
-
-<p class="score" id="score"></p>
+<div class="results" id="results"></div>
 
 <script>
+  const BUDGET = 250000;
+
   const TRADES = [
-    { name: "Site Preparation & Excavation", color: "#8B6914", icon: "\u{1F6DC}" },
-    { name: "Foundation & Concrete",         color: "#7F8C8D", icon: "\u{1F9F1}" },
-    { name: "Framing",                       color: "#C0792A", icon: "\u{1FA9A}" },
-    { name: "Roofing",                       color: "#6C3483", icon: "\u{1F3E0}" },
-    { name: "Windows & Exterior Doors",      color: "#2980B9", icon: "\u{1FA9F}" },
-    { name: "Plumbing Rough-In",             color: "#1ABC9C", icon: "\u{1F6BF}" },
-    { name: "Electrical Rough-In",           color: "#F39C12", icon: "\u26A1"     },
-    { name: "HVAC",                          color: "#5DADE2", icon: "\u2744\uFE0F" },
-    { name: "Insulation",                    color: "#E91E8B", icon: "\u{1F9E4}" },
-    { name: "Drywall",                       color: "#BDC3C7", icon: "\u{1F9F1}" },
-    { name: "Interior Finishes & Paint",     color: "#E74C3C", icon: "\u{1F3A8}" },
-    { name: "Flooring",                      color: "#AF601A", icon: "\u{1FA9A}" },
-    { name: "Cabinets & Countertops",        color: "#884EA0", icon: "\u{1F5C4}\uFE0F" },
-    { name: "Final Plumbing & Electrical",   color: "#17A589", icon: "\u{1F4A1}" },
-    { name: "Landscaping & Exterior",        color: "#27AE60", icon: "\u{1F333}" },
+    {
+      name: "Site Preparation & Excavation", color: "#8B6914", icon: "\u{1F6DC}",
+      bids: [
+        { tier: "Budget", price: 8000,  desc: "Basic clearing, minimal grading" },
+        { tier: "Standard", price: 15000, desc: "Full grading, soil testing, proper drainage" },
+        { tier: "Premium", price: 25000,  desc: "Engineered site plan, tree preservation, retaining walls" },
+      ]
+    },
+    {
+      name: "Foundation & Concrete", color: "#7F8C8D", icon: "\u{1F9F1}",
+      bids: [
+        { tier: "Budget", price: 15000, desc: "Basic slab-on-grade foundation" },
+        { tier: "Standard", price: 25000, desc: "Reinforced slab with moisture barrier" },
+        { tier: "Premium", price: 42000, desc: "Full basement with waterproofing and drainage" },
+      ]
+    },
+    {
+      name: "Framing", color: "#C0792A", icon: "\u{1FA9A}",
+      bids: [
+        { tier: "Budget", price: 20000, desc: "Standard lumber, basic roof trusses" },
+        { tier: "Standard", price: 35000, desc: "Engineered lumber, raised ceilings" },
+        { tier: "Premium", price: 52000, desc: "Steel-reinforced, open floor plan, vaulted ceilings" },
+      ]
+    },
+    {
+      name: "Roofing", color: "#6C3483", icon: "\u{1F3E0}",
+      bids: [
+        { tier: "Budget", price: 7000,  desc: "3-tab asphalt shingles, 20-year warranty" },
+        { tier: "Standard", price: 14000, desc: "Architectural shingles, 30-year warranty" },
+        { tier: "Premium", price: 28000, desc: "Standing seam metal roof, 50-year warranty" },
+      ]
+    },
+    {
+      name: "Windows & Exterior Doors", color: "#2980B9", icon: "\u{1FA9F}",
+      bids: [
+        { tier: "Budget", price: 6000,  desc: "Single-pane vinyl, builder-grade doors" },
+        { tier: "Standard", price: 14000, desc: "Double-pane low-E, fiberglass entry door" },
+        { tier: "Premium", price: 26000, desc: "Triple-pane, custom sizes, solid wood entry" },
+      ]
+    },
+    {
+      name: "Plumbing Rough-In", color: "#1ABC9C", icon: "\u{1F6BF}",
+      bids: [
+        { tier: "Budget", price: 8000,  desc: "PVC supply lines, basic fixture layout" },
+        { tier: "Standard", price: 15000, desc: "PEX piping, standard fixture prep, hose bibs" },
+        { tier: "Premium", price: 24000, desc: "PEX with manifold, recirculating hot water, gas lines" },
+      ]
+    },
+    {
+      name: "Electrical Rough-In", color: "#F39C12", icon: "\u26A1",
+      bids: [
+        { tier: "Budget", price: 7000,  desc: "Code-minimum outlets, basic 100-amp panel" },
+        { tier: "Standard", price: 13000, desc: "200-amp panel, USB outlets, wired for ceiling fans" },
+        { tier: "Premium", price: 22000, desc: "Smart panel, pre-wired for EV charger, whole-home surge" },
+      ]
+    },
+    {
+      name: "HVAC", color: "#5DADE2", icon: "\u2744\uFE0F",
+      bids: [
+        { tier: "Budget", price: 6000,  desc: "Basic single-stage furnace and AC" },
+        { tier: "Standard", price: 13000, desc: "Two-stage system, programmable thermostat, zoned" },
+        { tier: "Premium", price: 24000, desc: "Variable-speed heat pump, smart thermostat, dual-zone" },
+      ]
+    },
+    {
+      name: "Insulation", color: "#E91E8B", icon: "\u{1F9E4}",
+      bids: [
+        { tier: "Budget", price: 3000,  desc: "Fiberglass batts, code-minimum R-value" },
+        { tier: "Standard", price: 6500,  desc: "Blown-in fiberglass, improved R-value, air sealing" },
+        { tier: "Premium", price: 14000, desc: "Closed-cell spray foam, exceeds code, air-tight" },
+      ]
+    },
+    {
+      name: "Drywall", color: "#BDC3C7", icon: "\u{1F9F1}",
+      bids: [
+        { tier: "Budget", price: 7000,  desc: "Standard drywall, level 3 finish" },
+        { tier: "Standard", price: 11000, desc: "Moisture-resistant in baths, level 4 finish" },
+        { tier: "Premium", price: 18000, desc: "Soundproof drywall, level 5 finish throughout" },
+      ]
+    },
+    {
+      name: "Interior Finishes & Paint", color: "#E74C3C", icon: "\u{1F3A8}",
+      bids: [
+        { tier: "Budget", price: 8000,  desc: "Builder-grade trim, flat paint, basic hardware" },
+        { tier: "Standard", price: 18000, desc: "Craftsman trim, satin paint, brushed nickel hardware" },
+        { tier: "Premium", price: 35000, desc: "Custom millwork, designer paint, premium fixtures" },
+      ]
+    },
+    {
+      name: "Flooring", color: "#AF601A", icon: "\u{1FA9A}",
+      bids: [
+        { tier: "Budget", price: 5000,  desc: "Vinyl plank and basic carpet" },
+        { tier: "Standard", price: 13000, desc: "LVP throughout, tile in wet areas, upgraded carpet" },
+        { tier: "Premium", price: 26000, desc: "Hardwood floors, porcelain tile, heated bath floors" },
+      ]
+    },
+    {
+      name: "Cabinets & Countertops", color: "#884EA0", icon: "\u{1F5C4}\uFE0F",
+      bids: [
+        { tier: "Budget", price: 8000,  desc: "Stock cabinets, laminate countertops" },
+        { tier: "Standard", price: 18000, desc: "Semi-custom cabinets, quartz countertops" },
+        { tier: "Premium", price: 38000, desc: "Custom cabinetry, waterfall island, premium stone" },
+      ]
+    },
+    {
+      name: "Final Plumbing & Electrical", color: "#17A589", icon: "\u{1F4A1}",
+      bids: [
+        { tier: "Budget", price: 5000,  desc: "Builder-grade fixtures, basic lighting" },
+        { tier: "Standard", price: 11000, desc: "Quality fixtures, recessed lighting, dimmer switches" },
+        { tier: "Premium", price: 22000, desc: "Designer fixtures, smart lighting, steam shower" },
+      ]
+    },
+    {
+      name: "Landscaping & Exterior", color: "#27AE60", icon: "\u{1F333}",
+      bids: [
+        { tier: "Budget", price: 5000,  desc: "Basic sod, gravel driveway, no fence" },
+        { tier: "Standard", price: 15000, desc: "Lawn, concrete driveway, patio, basic planting" },
+        { tier: "Premium", price: 32000, desc: "Designed landscape, pavers, deck, irrigation, fencing" },
+      ]
+    },
   ];
 
-  let attempts = 0;
+  let currentStep = 0;
+  let totalSpent = 0;
+  let selections = [];
 
-  function shuffle(arr) {
-    const a = [...arr];
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
+  function formatMoney(n) {
+    return "$" + n.toLocaleString();
   }
 
-  function createBlock(trade, index) {
+  function updateBudgetBar() {
+    const pct = Math.min((totalSpent / BUDGET) * 100, 100);
+    const fill = document.getElementById("budgetFill");
+    fill.style.width = pct + "%";
+    fill.className = "budget-fill";
+    if (totalSpent > BUDGET) fill.classList.add("over");
+    else if (pct > 75) fill.classList.add("warning");
+
+    document.getElementById("spent").textContent = "Spent: " + formatMoney(totalSpent);
+    const left = BUDGET - totalSpent;
+    document.getElementById("remaining").textContent = left >= 0
+      ? formatMoney(left) + " remaining"
+      : formatMoney(Math.abs(left)) + " OVER BUDGET";
+    document.getElementById("remaining").style.color = left >= 0 ? "#7f8c8d" : "#e74c3c";
+  }
+
+  function addStackBlock(trade, bid) {
     const el = document.createElement("div");
-    el.className = "block";
-    el.dataset.index = index;
+    el.className = "stacked-block";
     el.style.background = trade.color;
-    el.innerHTML = `<span class="block-icon">${trade.icon}</span>${trade.name}`;
-    el.addEventListener("click", () => onBlockTap(el));
-    return el;
+
+    const tierClass = bid.tier === "Budget" ? "low" : bid.tier === "Standard" ? "med" : "high";
+    el.innerHTML = `
+      <span><span class="block-icon">${trade.icon}</span> ${trade.name}</span>
+      <span class="tier-badge">${bid.tier} ${formatMoney(bid.price)}</span>
+    `;
+    document.getElementById("stack").appendChild(el);
   }
 
-  function onBlockTap(block) {
-    clearFeedback();
-    const stack = document.getElementById("stack");
-    const available = document.getElementById("available");
+  function showCurrentTrade() {
+    const section = document.getElementById("bidSection");
 
-    if (block.classList.contains("stacked")) {
-      // Remove from stack, return to available pool
-      block.classList.remove("stacked", "correct", "incorrect");
-      available.appendChild(block);
-    } else {
-      // Add to top of stack
-      block.classList.add("stacked");
-      stack.appendChild(block);
-    }
-    updateDivider();
-  }
-
-  function updateDivider() {
-    const available = document.getElementById("available");
-    const label = document.getElementById("dividerLabel");
-    label.textContent = available.children.length > 0
-      ? "--- tap a block to stack it ---"
-      : "--- all blocks placed ---";
-  }
-
-  function getStackedBlocks() {
-    return Array.from(document.getElementById("stack").querySelectorAll(".block"));
-  }
-
-  function checkOrder() {
-    const stacked = getStackedBlocks();
-    if (stacked.length === 0) {
-      showFeedback("Tap some blocks to stack them first!", "info");
-      return;
-    }
-    if (stacked.length < TRADES.length) {
-      showFeedback(`${stacked.length} of ${TRADES.length} placed. Stack them all before checking!`, "info");
+    if (currentStep >= TRADES.length) {
+      section.innerHTML = "";
+      showResults();
       return;
     }
 
-    attempts++;
-    let allCorrect = true;
+    const trade = TRADES[currentStep];
+    section.innerHTML = `
+      <div class="trade-label">
+        ${trade.icon} ${trade.name}
+        <div class="trade-step">Trade ${currentStep + 1} of ${TRADES.length}</div>
+      </div>
+      <div class="bid-options">
+        ${trade.bids.map((bid, i) => {
+          const tierClass = i === 0 ? "low" : i === 1 ? "med" : "high";
+          return `
+            <div class="bid-card ${tierClass}" onclick="selectBid(${i})">
+              <div class="bid-info">
+                <div class="bid-tier">${bid.tier}</div>
+                <div class="bid-desc">${bid.desc}</div>
+              </div>
+              <div class="bid-price">${formatMoney(bid.price)}</div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    `;
+  }
 
-    stacked.forEach((block, i) => {
-      if (parseInt(block.dataset.index) === i) {
-        block.classList.add("correct");
-        block.classList.remove("incorrect");
-      } else {
-        block.classList.add("incorrect");
-        block.classList.remove("correct");
-        allCorrect = false;
-      }
-    });
+  function selectBid(bidIndex) {
+    const trade = TRADES[currentStep];
+    const bid = trade.bids[bidIndex];
 
-    if (allCorrect) {
-      showFeedback("Perfect! You built the house in the correct order!", "success");
-      document.getElementById("celebration").classList.add("show");
-      document.getElementById("score").textContent =
-        `Completed in ${attempts} ${attempts === 1 ? "attempt" : "attempts"}`;
+    totalSpent += bid.price;
+    selections.push({ trade, bid, bidIndex });
+
+    updateBudgetBar();
+    addStackBlock(trade, bid);
+
+    currentStep++;
+    showCurrentTrade();
+  }
+
+  function showResults() {
+    const results = document.getElementById("results");
+    const underBudget = totalSpent <= BUDGET;
+
+    // Quality score: 0 for budget, 1 for standard, 2 for premium
+    const qualityPoints = selections.reduce((sum, s) => sum + s.bidIndex, 0);
+    const maxPoints = TRADES.length * 2;
+    const qualityPct = Math.round((qualityPoints / maxPoints) * 100);
+
+    let qualityColor, qualityLabel, icon, message;
+    if (qualityPct >= 75) {
+      qualityColor = "#e67e22"; qualityLabel = "Luxury Build";
+      icon = "\u{1F3F0}"; message = "Top-of-the-line finishes throughout!";
+    } else if (qualityPct >= 50) {
+      qualityColor = "#3498db"; qualityLabel = "Quality Build";
+      icon = "\u{1F3E1}"; message = "A well-built home with great features.";
+    } else if (qualityPct >= 25) {
+      qualityColor = "#27ae60"; qualityLabel = "Solid Build";
+      icon = "\u{1F3E0}"; message = "A practical home that gets the job done.";
     } else {
-      const correct = stacked.filter((b, i) => parseInt(b.dataset.index) === i).length;
-      showFeedback(`${correct} of ${TRADES.length} blocks are in the right position. Keep trying!`, "error");
+      qualityColor = "#95a5a6"; qualityLabel = "Basic Build";
+      icon = "\u{1F3DA}\uFE0F"; message = "It's a roof over your head!";
     }
-  }
 
-  function showHint() {
-    const stacked = getStackedBlocks();
-    for (let i = 0; i < TRADES.length; i++) {
-      if (!stacked[i] || parseInt(stacked[i].dataset.index) !== i) {
-        showFeedback(`Hint: Position ${i + 1} from the bottom should be "${TRADES[i].name}"`, "info");
-        return;
-      }
-    }
-    showFeedback("Everything looks correct!", "success");
-  }
+    const budgetMsg = underBudget
+      ? `You came in at <strong>${formatMoney(totalSpent)}</strong> — <strong>${formatMoney(BUDGET - totalSpent)}</strong> under budget!`
+      : `You spent <strong>${formatMoney(totalSpent)}</strong> — <strong style="color:#e74c3c">${formatMoney(totalSpent - BUDGET)} over budget!</strong>`;
 
-  function showFeedback(msg, type) {
-    const el = document.getElementById("feedback");
-    el.textContent = msg;
-    el.className = "feedback " + type;
-  }
+    let breakdownHTML = selections.map(s => {
+      const tierClass = s.bidIndex === 0 ? "low" : s.bidIndex === 1 ? "med" : "high";
+      return `
+        <div class="breakdown-row">
+          <span><span class="tier-dot ${tierClass}"></span>${s.trade.icon} ${s.trade.name}</span>
+          <span>${s.bid.tier} — ${formatMoney(s.bid.price)}</span>
+        </div>
+      `;
+    }).join("");
 
-  function clearFeedback() {
-    const el = document.getElementById("feedback");
-    el.textContent = "";
-    el.className = "feedback";
-    document.querySelectorAll(".block").forEach(b => b.classList.remove("correct", "incorrect"));
-    document.getElementById("celebration").classList.remove("show");
+    results.innerHTML = `
+      <div class="result-icon">${icon}</div>
+      <h2>${underBudget ? "Build Complete!" : "Over Budget!"}</h2>
+      <div class="result-summary">${message}<br>${budgetMsg}</div>
+      <div class="quality-label">Build Quality: ${qualityPct}% — ${qualityLabel}</div>
+      <div class="quality-bar">
+        <div class="quality-fill" style="width: ${qualityPct}%; background: ${qualityColor}"></div>
+      </div>
+      <div class="breakdown">
+        <strong>Cost Breakdown</strong>
+        ${breakdownHTML}
+        <div class="breakdown-row" style="font-weight:700; border-top: 2px solid #ccc; margin-top:4px; padding-top:6px;">
+          <span>Total</span>
+          <span>${formatMoney(totalSpent)}</span>
+        </div>
+      </div>
+      <button class="btn-reset" onclick="resetGame()">Play Again</button>
+    `;
+    results.classList.add("show");
   }
 
   function resetGame() {
-    clearFeedback();
-    attempts = 0;
-    document.getElementById("score").textContent = "";
-    initGame();
+    currentStep = 0;
+    totalSpent = 0;
+    selections = [];
+    document.getElementById("stack").innerHTML = "";
+    document.getElementById("results").innerHTML = "";
+    document.getElementById("results").classList.remove("show");
+    updateBudgetBar();
+    showCurrentTrade();
   }
 
-  function initGame() {
-    const stack = document.getElementById("stack");
-    const available = document.getElementById("available");
-    stack.innerHTML = "";
-    available.innerHTML = "";
-
-    const shuffled = shuffle(TRADES.map((t, i) => ({ ...t, originalIndex: i })));
-    shuffled.forEach(trade => {
-      available.appendChild(createBlock(trade, trade.originalIndex));
-    });
-    updateDivider();
-  }
-
-  initGame();
+  // Start
+  updateBudgetBar();
+  showCurrentTrade();
 </script>
 
 </body>
