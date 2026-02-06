@@ -120,6 +120,15 @@
       justify-content: space-between;
       align-items: center;
       animation: slideIn 0.3s ease;
+      cursor: pointer;
+      transition: transform 0.15s, outline 0.15s;
+    }
+
+    .stacked-block:active { transform: scale(0.98); }
+
+    .stacked-block.editing {
+      outline: 2px solid #fff;
+      outline-offset: 1px;
     }
 
     .stacked-block .tier-badge {
@@ -653,15 +662,107 @@
     sub.className = left >= 0 ? "tracker-sub" : "tracker-sub over-text";
   }
 
-  function addStackBlock(trade, bid) {
+  let editingIndex = null; // which selection index is being edited
+
+  function addStackBlock(trade, bid, selIndex) {
     const el = document.createElement("div");
     el.className = "stacked-block";
+    el.dataset.selIndex = selIndex;
     el.style.background = trade.color;
     el.innerHTML = `
       <span>${trade.icon} ${trade.name}</span>
       <span class="tier-badge">${bid.tier} &middot; ${formatMoney(bid.price)} &middot; ${bid.weeks}w</span>
     `;
+    el.addEventListener("click", () => editBlock(selIndex));
     document.getElementById("stack").appendChild(el);
+  }
+
+  function updateStackBlock(selIndex, trade, bid) {
+    const el = document.querySelector(`.stacked-block[data-sel-index="${selIndex}"]`);
+    if (!el) return;
+    el.innerHTML = `
+      <span>${trade.icon} ${trade.name}</span>
+      <span class="tier-badge">${bid.tier} &middot; ${formatMoney(bid.price)} &middot; ${bid.weeks}w</span>
+    `;
+    el.addEventListener("click", () => editBlock(selIndex));
+  }
+
+  function editBlock(selIndex) {
+    // Don't allow editing while still placing initial bids
+    if (currentStep < TRADES.length) return;
+    // If in results view, hide results to edit
+    document.getElementById("results").classList.remove("show");
+
+    // Highlight the block being edited
+    document.querySelectorAll(".stacked-block").forEach(b => b.classList.remove("editing"));
+    const el = document.querySelector(`.stacked-block[data-sel-index="${selIndex}"]`);
+    if (el) el.classList.add("editing");
+
+    editingIndex = selIndex;
+    const sel = selections[selIndex];
+    const trade = sel.trade;
+
+    const parallelNames = TRADES
+      .filter(t => t.phase === trade.phase && t.name !== trade.name)
+      .map(t => t.name);
+    const parallelNote = parallelNames.length > 0
+      ? `<div class="trade-step" style="color:#3498db">Runs parallel with: ${parallelNames.join(", ")}</div>`
+      : "";
+
+    const section = document.getElementById("bidSection");
+    section.innerHTML = `
+      <div class="trade-label">
+        Editing: ${trade.icon} ${trade.name}
+        <div class="trade-step">Currently: ${sel.bid.tier} &middot; ${formatMoney(sel.bid.price)} &middot; ${sel.bid.weeks}w</div>
+        ${parallelNote}
+      </div>
+      <div class="bid-options">
+        ${trade.bids.map((bid, i) => {
+          const tierClass = i === 0 ? "low" : i === 1 ? "med" : "high";
+          const current = i === sel.bidIndex ? " style='border-color:#2c3e50;border-width:3px'" : "";
+          return `
+            <div class="bid-card ${tierClass}"${current} onclick="confirmEdit(${i})">
+              <div class="bid-info">
+                <div class="bid-tier">${bid.tier}${i === sel.bidIndex ? " (current)" : ""}</div>
+                <div class="bid-desc">${bid.desc}</div>
+              </div>
+              <div class="bid-right">
+                <div class="bid-price">${formatMoney(bid.price)}</div>
+                <div class="bid-duration">${bid.weeks} week${bid.weeks !== 1 ? "s" : ""}</div>
+              </div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    `;
+  }
+
+  function confirmEdit(newBidIndex) {
+    const sel = selections[editingIndex];
+    const oldBid = sel.bid;
+    const newBid = sel.trade.bids[newBidIndex];
+
+    // Update totals
+    totalSpent -= oldBid.price;
+    totalSpent += newBid.price;
+
+    // Update selection
+    sel.bid = newBid;
+    sel.bidIndex = newBidIndex;
+
+    // Update the visual block
+    updateStackBlock(editingIndex, sel.trade, newBid);
+
+    // Clear editing state
+    document.querySelectorAll(".stacked-block").forEach(b => b.classList.remove("editing"));
+    editingIndex = null;
+
+    updateBudgetBar();
+    updateScheduleBar();
+
+    // Show results again
+    document.getElementById("bidSection").innerHTML = "";
+    showResults();
   }
 
   function showCurrentTrade() {
@@ -717,7 +818,7 @@
 
     updateBudgetBar();
     updateScheduleBar();
-    addStackBlock(trade, bid);
+    addStackBlock(trade, bid, selections.length - 1);
 
     currentStep++;
     showCurrentTrade();
