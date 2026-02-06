@@ -156,6 +156,13 @@
       display: flex;
     }
 
+    .block.selected {
+      outline: 3px solid #fff;
+      outline-offset: 2px;
+      transform: scale(1.05);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+    }
+
     .block.correct {
       border-color: #27ae60;
       box-shadow: 0 0 8px rgba(39, 174, 96, 0.4);
@@ -279,8 +286,9 @@
 
 <h1>Build a House</h1>
 <p class="instructions">
-  Drag the construction trade blocks from the yard and stack them on the build
-  site in the correct order. Start with the first trade at the bottom!
+  Drag blocks from the yard to the build site — or click a block to select it,
+  then click the build site to place it. Stack them in the correct order, starting
+  from the bottom!
 </p>
 
 <div class="game-container">
@@ -334,6 +342,7 @@
 
   let attempts = 0;
   let draggedBlock = null;
+  let selectedBlock = null; // for click-to-move fallback
 
   // --- Shuffle helper ---
   function shuffle(arr) {
@@ -357,6 +366,9 @@
     el.addEventListener("dragstart", onDragStart);
     el.addEventListener("dragend", onDragEnd);
 
+    // Click-to-select fallback
+    el.addEventListener("click", onBlockClick);
+
     // Touch support
     el.addEventListener("touchstart", onTouchStart, { passive: false });
     el.addEventListener("touchmove", onTouchMove, { passive: false });
@@ -370,6 +382,7 @@
     draggedBlock = e.target.closest(".block");
     draggedBlock.classList.add("dragging");
     e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", "");
   }
 
   function onDragEnd() {
@@ -421,6 +434,43 @@
   function onDragLeaveYard(e) {
     if (!e.currentTarget.contains(e.relatedTarget))
       document.getElementById("blockYard").classList.remove("drag-over");
+  }
+
+  // --- Click-to-select fallback ---
+  function onBlockClick(e) {
+    const block = e.target.closest(".block");
+    if (!block) return;
+
+    if (selectedBlock === block) {
+      // Deselect if clicking the same block
+      selectedBlock.classList.remove("selected");
+      selectedBlock = null;
+      return;
+    }
+
+    if (selectedBlock) {
+      selectedBlock.classList.remove("selected");
+    }
+    selectedBlock = block;
+    block.classList.add("selected");
+  }
+
+  function onZoneClick(zone) {
+    if (!selectedBlock) return;
+    const site = document.getElementById("buildSite");
+    const yard = document.getElementById("blockYard");
+
+    if (zone === "site") {
+      site.appendChild(selectedBlock);
+      selectedBlock.classList.add("placed");
+    } else {
+      yard.appendChild(selectedBlock);
+      selectedBlock.classList.remove("placed", "correct", "incorrect");
+    }
+
+    selectedBlock.classList.remove("selected");
+    clearFeedback();
+    selectedBlock = null;
   }
 
   // --- Touch support ---
@@ -594,12 +644,18 @@
   buildSite.addEventListener("drop", onDropBuildSite);
   buildSite.addEventListener("dragenter", onDragEnterSite);
   buildSite.addEventListener("dragleave", onDragLeaveSite);
+  buildSite.addEventListener("click", function(e) {
+    if (!e.target.closest(".block")) onZoneClick("site");
+  });
 
   const blockYard = document.getElementById("blockYard");
   blockYard.addEventListener("dragover", allowDrop);
   blockYard.addEventListener("drop", onDropBlockYard);
   blockYard.addEventListener("dragenter", onDragEnterYard);
   blockYard.addEventListener("dragleave", onDragLeaveYard);
+  blockYard.addEventListener("click", function(e) {
+    if (!e.target.closest(".block")) onZoneClick("yard");
+  });
 
   // Start
   initGame();
