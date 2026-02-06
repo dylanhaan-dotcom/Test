@@ -15,147 +15,92 @@
       flex-direction: column;
       align-items: center;
       user-select: none;
-      overflow-x: hidden;
+      padding-bottom: 40px;
     }
 
     h1 {
       margin-top: 20px;
       color: #2c3e50;
-      font-size: 2rem;
+      font-size: 1.8rem;
       text-shadow: 1px 1px 2px rgba(255,255,255,0.6);
     }
 
     .instructions {
       color: #34495e;
-      margin: 8px 0 16px;
-      font-size: 0.95rem;
+      margin: 6px 16px 12px;
+      font-size: 0.9rem;
       text-align: center;
-      max-width: 500px;
+      max-width: 400px;
       line-height: 1.4;
     }
 
-    .game-container {
-      display: flex;
-      gap: 40px;
-      align-items: flex-start;
-      justify-content: center;
-      flex-wrap: wrap;
+    /* === Stack area === */
+    .stack {
       width: 100%;
-      max-width: 900px;
-      padding: 0 20px;
-    }
-
-    /* === Build Zone === */
-    .build-zone {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .build-zone h2 {
-      color: #2c3e50;
-      margin-bottom: 10px;
-      font-size: 1.1rem;
-    }
-
-    .build-site {
-      width: 320px;
-      min-height: 520px;
-      border: 3px dashed #8B7355;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.15);
+      max-width: 360px;
+      min-height: 60px;
       display: flex;
       flex-direction: column-reverse;
       align-items: center;
-      padding: 8px;
+      padding: 8px 16px;
       gap: 4px;
-      position: relative;
-      transition: background 0.2s;
-    }
-
-    .build-site.drag-over {
-      background: rgba(255, 255, 255, 0.35);
-      border-color: #5B8C3E;
+      margin-bottom: 8px;
     }
 
     .ground-line {
       width: 100%;
-      height: 3px;
+      max-width: 340px;
+      height: 4px;
       background: #6B4226;
       border-radius: 2px;
-      flex-shrink: 0;
     }
 
-    /* === Block Yard === */
-    .block-yard {
+    /* === Available blocks === */
+    .available {
+      width: 100%;
+      max-width: 360px;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .block-yard h2 {
-      color: #2c3e50;
-      margin-bottom: 10px;
-      font-size: 1.1rem;
-    }
-
-    .available-blocks {
-      width: 280px;
-      min-height: 520px;
-      background: rgba(255, 255, 255, 0.25);
-      border-radius: 8px;
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
+      flex-wrap: wrap;
+      justify-content: center;
       gap: 6px;
+      padding: 8px 16px;
     }
 
     /* === Blocks === */
     .block {
-      width: 100%;
-      padding: 12px 16px;
+      padding: 10px 14px;
       border-radius: 6px;
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       text-align: center;
-      cursor: grab;
-      transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
       border: 2px solid rgba(0,0,0,0.15);
       color: #fff;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
-      position: relative;
     }
 
-    .block:hover {
-      transform: scale(1.03);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    .block:active {
+      transform: scale(0.96);
     }
 
-    .block.dragging {
-      opacity: 0.4;
-      cursor: grabbing;
+    .block.stacked {
+      width: 100%;
+      max-width: 340px;
     }
 
     .block-icon {
-      margin-right: 8px;
-      font-size: 1.1rem;
-    }
-
-    .block.selected {
-      outline: 3px solid #fff;
-      outline-offset: 2px;
-      transform: scale(1.05);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+      margin-right: 6px;
     }
 
     .block.correct {
       border-color: #27ae60;
-      box-shadow: 0 0 8px rgba(39, 174, 96, 0.4);
+      box-shadow: 0 0 8px rgba(39, 174, 96, 0.5);
     }
 
     .block.incorrect {
       border-color: #e74c3c;
-      box-shadow: 0 0 8px rgba(231, 76, 60, 0.4);
+      box-shadow: 0 0 8px rgba(231, 76, 60, 0.5);
       animation: shake 0.4s ease;
     }
 
@@ -167,52 +112,29 @@
       80% { transform: translateX(4px); }
     }
 
-    /* === Feedback === */
-    .feedback {
-      margin-top: 16px;
-      padding: 12px 24px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 1rem;
+    /* === Divider === */
+    .divider {
+      width: 100%;
+      max-width: 340px;
       text-align: center;
-      min-height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      max-width: 500px;
-    }
-
-    .feedback.success {
-      background: #d4edda;
-      color: #155724;
-      border: 2px solid #27ae60;
-    }
-
-    .feedback.error {
-      background: #f8d7da;
-      color: #721c24;
-      border: 2px solid #e74c3c;
-    }
-
-    .feedback.info {
-      background: #d1ecf1;
-      color: #0c5460;
-      border: 2px solid #17a2b8;
+      color: #5a6a5a;
+      font-size: 0.8rem;
+      margin: 4px 0;
+      font-weight: 600;
     }
 
     /* === Buttons === */
     .btn-row {
       display: flex;
-      gap: 12px;
-      margin-top: 12px;
-      margin-bottom: 24px;
+      gap: 10px;
+      margin: 12px 0;
     }
 
     button {
-      padding: 10px 24px;
+      padding: 10px 20px;
       border: none;
       border-radius: 6px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
       transition: background 0.2s, transform 0.1s;
@@ -220,75 +142,52 @@
 
     button:active { transform: scale(0.96); }
 
-    .btn-check {
-      background: #27ae60;
-      color: #fff;
-    }
+    .btn-check { background: #27ae60; color: #fff; }
     .btn-check:hover { background: #219a52; }
-
-    .btn-reset {
-      background: #e67e22;
-      color: #fff;
-    }
+    .btn-reset { background: #e67e22; color: #fff; }
     .btn-reset:hover { background: #cf6d17; }
-
-    .btn-hint {
-      background: #3498db;
-      color: #fff;
-    }
+    .btn-hint { background: #3498db; color: #fff; }
     .btn-hint:hover { background: #2980b9; }
 
-    /* === Win Celebration === */
-    .celebration {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .celebration.show {
-      display: flex;
-    }
-
-    .house-icon {
-      font-size: 4rem;
-      animation: bounce 0.6s ease infinite alternate;
-    }
-
-    @keyframes bounce {
-      from { transform: translateY(0); }
-      to { transform: translateY(-10px); }
-    }
-
-    .score {
-      color: #2c3e50;
+    /* === Feedback === */
+    .feedback {
+      margin: 8px 16px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
       font-size: 0.9rem;
-      margin-top: 4px;
+      text-align: center;
+      max-width: 400px;
     }
+
+    .feedback:empty { display: none; }
+    .feedback.success { background: #d4edda; color: #155724; border: 2px solid #27ae60; }
+    .feedback.error { background: #f8d7da; color: #721c24; border: 2px solid #e74c3c; }
+    .feedback.info { background: #d1ecf1; color: #0c5460; border: 2px solid #17a2b8; }
+
+    /* === Celebration === */
+    .celebration { display: none; flex-direction: column; align-items: center; gap: 6px; }
+    .celebration.show { display: flex; }
+    .house-icon { font-size: 3.5rem; animation: bounce 0.6s ease infinite alternate; }
+    @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+
+    .score { color: #2c3e50; font-size: 0.85rem; margin-top: 4px; }
   </style>
 </head>
 <body>
 
 <h1>Build a House</h1>
 <p class="instructions">
-  Drag blocks from the yard to the build site — or click a block to select it,
-  then click the build site to place it. Stack them in the correct order, starting
-  from the bottom!
+  Tap a block to stack it. Tap a stacked block to remove it.
+  Stack all 15 trades in the correct order from bottom to top!
 </p>
 
-<div class="game-container">
-  <div class="build-zone">
-    <h2>Build Site</h2>
-    <div class="build-site" id="buildSite">
-      <div class="ground-line"></div>
-    </div>
-  </div>
+<div class="stack" id="stack"></div>
+<div class="ground-line"></div>
 
-  <div class="block-yard">
-    <h2>Block Yard</h2>
-    <div class="available-blocks" id="blockYard"></div>
-  </div>
-</div>
+<div class="divider" id="dividerLabel">--- tap a block to stack it ---</div>
+
+<div class="available" id="available"></div>
 
 <div class="btn-row">
   <button class="btn-check" onclick="checkOrder()">Check Order</button>
@@ -300,13 +199,12 @@
 
 <div class="celebration" id="celebration">
   <div class="house-icon">🏠</div>
-  <strong style="font-size:1.3rem; color:#155724;">You built the house!</strong>
+  <strong style="font-size:1.2rem; color:#155724;">You built the house!</strong>
 </div>
 
 <p class="score" id="score"></p>
 
 <script>
-  // Correct build order (index 0 = first / bottom)
   const TRADES = [
     { name: "Site Preparation & Excavation", color: "#8B6914", icon: "\u{1F6DC}" },
     { name: "Foundation & Concrete",         color: "#7F8C8D", icon: "\u{1F9F1}" },
@@ -326,10 +224,7 @@
   ];
 
   let attempts = 0;
-  let draggedBlock = null;
-  let selectedBlock = null; // for click-to-move fallback
 
-  // --- Shuffle helper ---
   function shuffle(arr) {
     const a = [...arr];
     for (let i = a.length - 1; i > 0; i--) {
@@ -339,240 +234,60 @@
     return a;
   }
 
-  // --- Create a block element ---
   function createBlock(trade, index) {
     const el = document.createElement("div");
     el.className = "block";
-    el.draggable = true;
     el.dataset.index = index;
     el.style.background = trade.color;
     el.innerHTML = `<span class="block-icon">${trade.icon}</span>${trade.name}`;
-
-    el.addEventListener("dragstart", onDragStart);
-    el.addEventListener("dragend", onDragEnd);
-
-    // Click-to-select fallback
-    el.addEventListener("click", onBlockClick);
-
-    // Touch support
-    el.addEventListener("touchstart", onTouchStart, { passive: false });
-    el.addEventListener("touchmove", onTouchMove, { passive: false });
-    el.addEventListener("touchend", onTouchEnd);
-
+    el.addEventListener("click", () => onBlockTap(el));
     return el;
   }
 
-  // --- Drag & Drop ---
-  function onDragStart(e) {
-    draggedBlock = e.target.closest(".block");
-    draggedBlock.classList.add("dragging");
-    e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("text/plain", "");
-  }
-
-  function onDragEnd() {
-    if (draggedBlock) draggedBlock.classList.remove("dragging");
-    draggedBlock = null;
-    document.getElementById("buildSite").classList.remove("drag-over");
-    document.getElementById("blockYard").classList.remove("drag-over");
-  }
-
-  function allowDrop(e) {
-    e.preventDefault();
-  }
-
-  function onDropBuildSite(e) {
-    e.preventDefault();
-    const site = document.getElementById("buildSite");
-    site.classList.remove("drag-over");
-    if (!draggedBlock) return;
-    // Insert before ground-line (which is the first child in DOM due to column-reverse)
-    site.appendChild(draggedBlock);
-    draggedBlock.classList.add("placed");
-    draggedBlock.classList.remove("dragging");
+  function onBlockTap(block) {
     clearFeedback();
-    draggedBlock = null;
-  }
+    const stack = document.getElementById("stack");
+    const available = document.getElementById("available");
 
-  function onDropBlockYard(e) {
-    e.preventDefault();
-    const yard = document.getElementById("blockYard");
-    yard.classList.remove("drag-over");
-    if (!draggedBlock) return;
-    yard.appendChild(draggedBlock);
-    draggedBlock.classList.remove("placed", "correct", "incorrect", "dragging");
-    clearFeedback();
-    draggedBlock = null;
-  }
-
-  // Highlight zones on drag-over
-  function onDragEnterSite() {
-    document.getElementById("buildSite").classList.add("drag-over");
-  }
-  function onDragLeaveSite(e) {
-    if (!e.currentTarget.contains(e.relatedTarget))
-      document.getElementById("buildSite").classList.remove("drag-over");
-  }
-  function onDragEnterYard() {
-    document.getElementById("blockYard").classList.add("drag-over");
-  }
-  function onDragLeaveYard(e) {
-    if (!e.currentTarget.contains(e.relatedTarget))
-      document.getElementById("blockYard").classList.remove("drag-over");
-  }
-
-  // --- Click-to-select fallback ---
-  function onBlockClick(e) {
-    const block = e.target.closest(".block");
-    if (!block) return;
-
-    if (selectedBlock === block) {
-      // Deselect if clicking the same block
-      selectedBlock.classList.remove("selected");
-      selectedBlock = null;
-      return;
-    }
-
-    if (selectedBlock) {
-      selectedBlock.classList.remove("selected");
-    }
-    selectedBlock = block;
-    block.classList.add("selected");
-  }
-
-  function onZoneClick(zone) {
-    if (!selectedBlock) return;
-    const site = document.getElementById("buildSite");
-    const yard = document.getElementById("blockYard");
-
-    if (zone === "site") {
-      site.appendChild(selectedBlock);
-      selectedBlock.classList.add("placed");
+    if (block.classList.contains("stacked")) {
+      // Remove from stack, return to available pool
+      block.classList.remove("stacked", "correct", "incorrect");
+      available.appendChild(block);
     } else {
-      yard.appendChild(selectedBlock);
-      selectedBlock.classList.remove("placed", "correct", "incorrect");
+      // Add to top of stack
+      block.classList.add("stacked");
+      stack.appendChild(block);
     }
-
-    selectedBlock.classList.remove("selected");
-    clearFeedback();
-    selectedBlock = null;
+    updateDivider();
   }
 
-  // --- Touch drag support ---
-  // Only activates on swipe; simple taps fall through to click-to-select
-  let touchClone = null;
-  let touchOffsetX = 0;
-  let touchOffsetY = 0;
-  let touchStartX = 0;
-  let touchStartY = 0;
-  let touchDragging = false;
-  const DRAG_THRESHOLD = 10; // px of movement before drag activates
-
-  function onTouchStart(e) {
-    const touch = e.touches[0];
-    const block = e.target.closest(".block");
-    if (!block) return;
-
-    draggedBlock = block;
-    touchStartX = touch.clientX;
-    touchStartY = touch.clientY;
-    touchDragging = false;
-
-    const rect = block.getBoundingClientRect();
-    touchOffsetX = touch.clientX - rect.left;
-    touchOffsetY = touch.clientY - rect.top;
+  function updateDivider() {
+    const available = document.getElementById("available");
+    const label = document.getElementById("dividerLabel");
+    label.textContent = available.children.length > 0
+      ? "--- tap a block to stack it ---"
+      : "--- all blocks placed ---";
   }
 
-  function onTouchMove(e) {
-    if (!draggedBlock) return;
-    const touch = e.touches[0];
-
-    // Start dragging only after finger moves past threshold
-    if (!touchDragging) {
-      const dx = touch.clientX - touchStartX;
-      const dy = touch.clientY - touchStartY;
-      if (Math.abs(dx) < DRAG_THRESHOLD && Math.abs(dy) < DRAG_THRESHOLD) return;
-
-      touchDragging = true;
-      const rect = draggedBlock.getBoundingClientRect();
-      touchClone = draggedBlock.cloneNode(true);
-      touchClone.style.position = "fixed";
-      touchClone.style.zIndex = "9999";
-      touchClone.style.width = rect.width + "px";
-      touchClone.style.pointerEvents = "none";
-      touchClone.style.opacity = "0.85";
-      document.body.appendChild(touchClone);
-      draggedBlock.classList.add("dragging");
-    }
-
-    e.preventDefault();
-    touchClone.style.left = (touch.clientX - touchOffsetX) + "px";
-    touchClone.style.top = (touch.clientY - touchOffsetY) + "px";
-  }
-
-  function onTouchEnd(e) {
-    if (!draggedBlock) return;
-
-    // If no drag happened, let the click event handle it (tap = select)
-    if (!touchDragging) {
-      draggedBlock = null;
-      return;
-    }
-
-    const touch = e.changedTouches[0];
-    if (touchClone) {
-      touchClone.remove();
-      touchClone = null;
-    }
-
-    const site = document.getElementById("buildSite");
-    const yard = document.getElementById("blockYard");
-    const siteRect = site.getBoundingClientRect();
-    const yardRect = yard.getBoundingClientRect();
-
-    const x = touch.clientX;
-    const y = touch.clientY;
-
-    if (x >= siteRect.left && x <= siteRect.right && y >= siteRect.top && y <= siteRect.bottom) {
-      site.appendChild(draggedBlock);
-      draggedBlock.classList.add("placed");
-    } else if (x >= yardRect.left && x <= yardRect.right && y >= yardRect.top && y <= yardRect.bottom) {
-      yard.appendChild(draggedBlock);
-      draggedBlock.classList.remove("placed", "correct", "incorrect");
-    }
-
-    draggedBlock.classList.remove("dragging");
-    clearFeedback();
-    draggedBlock = null;
-    touchDragging = false;
-  }
-
-  // --- Game logic ---
-  function getPlacedBlocks() {
-    const site = document.getElementById("buildSite");
-    // column-reverse: DOM order is visual bottom-to-top
-    return Array.from(site.querySelectorAll(".block"));
+  function getStackedBlocks() {
+    return Array.from(document.getElementById("stack").querySelectorAll(".block"));
   }
 
   function checkOrder() {
-    const placed = getPlacedBlocks();
-    if (placed.length === 0) {
-      showFeedback("Drag some blocks to the build site first!", "info");
+    const stacked = getStackedBlocks();
+    if (stacked.length === 0) {
+      showFeedback("Tap some blocks to stack them first!", "info");
       return;
     }
-
-    if (placed.length < TRADES.length) {
-      showFeedback(
-        `You've placed ${placed.length} of ${TRADES.length} trades. Place them all before checking!`,
-        "info"
-      );
+    if (stacked.length < TRADES.length) {
+      showFeedback(`${stacked.length} of ${TRADES.length} placed. Stack them all before checking!`, "info");
       return;
     }
 
     attempts++;
     let allCorrect = true;
 
-    placed.forEach((block, i) => {
+    stacked.forEach((block, i) => {
       if (parseInt(block.dataset.index) === i) {
         block.classList.add("correct");
         block.classList.remove("incorrect");
@@ -589,22 +304,16 @@
       document.getElementById("score").textContent =
         `Completed in ${attempts} ${attempts === 1 ? "attempt" : "attempts"}`;
     } else {
-      const correctCount = placed.filter(
-        (b, i) => parseInt(b.dataset.index) === i
-      ).length;
-      showFeedback(
-        `${correctCount} of ${TRADES.length} blocks are in the right position. Keep trying!`,
-        "error"
-      );
+      const correct = stacked.filter((b, i) => parseInt(b.dataset.index) === i).length;
+      showFeedback(`${correct} of ${TRADES.length} blocks are in the right position. Keep trying!`, "error");
     }
   }
 
   function showHint() {
-    const placed = getPlacedBlocks();
-    // Find the first wrong or missing position
+    const stacked = getStackedBlocks();
     for (let i = 0; i < TRADES.length; i++) {
-      if (!placed[i] || parseInt(placed[i].dataset.index) !== i) {
-        showFeedback(`Hint: Position ${i + 1} (from the bottom) should be "${TRADES[i].name}"`, "info");
+      if (!stacked[i] || parseInt(stacked[i].dataset.index) !== i) {
+        showFeedback(`Hint: Position ${i + 1} from the bottom should be "${TRADES[i].name}"`, "info");
         return;
       }
     }
@@ -621,9 +330,7 @@
     const el = document.getElementById("feedback");
     el.textContent = "";
     el.className = "feedback";
-    document.querySelectorAll(".block").forEach(b => {
-      b.classList.remove("correct", "incorrect");
-    });
+    document.querySelectorAll(".block").forEach(b => b.classList.remove("correct", "incorrect"));
     document.getElementById("celebration").classList.remove("show");
   }
 
@@ -635,40 +342,18 @@
   }
 
   function initGame() {
-    const yard = document.getElementById("blockYard");
-    const site = document.getElementById("buildSite");
+    const stack = document.getElementById("stack");
+    const available = document.getElementById("available");
+    stack.innerHTML = "";
+    available.innerHTML = "";
 
-    // Remove existing blocks
-    yard.innerHTML = "";
-    site.querySelectorAll(".block").forEach(b => b.remove());
-
-    // Create shuffled blocks in the yard
     const shuffled = shuffle(TRADES.map((t, i) => ({ ...t, originalIndex: i })));
     shuffled.forEach(trade => {
-      yard.appendChild(createBlock(trade, trade.originalIndex));
+      available.appendChild(createBlock(trade, trade.originalIndex));
     });
+    updateDivider();
   }
 
-  // Wire up drop zones
-  const buildSite = document.getElementById("buildSite");
-  buildSite.addEventListener("dragover", allowDrop);
-  buildSite.addEventListener("drop", onDropBuildSite);
-  buildSite.addEventListener("dragenter", onDragEnterSite);
-  buildSite.addEventListener("dragleave", onDragLeaveSite);
-  buildSite.addEventListener("click", function(e) {
-    if (!e.target.closest(".block")) onZoneClick("site");
-  });
-
-  const blockYard = document.getElementById("blockYard");
-  blockYard.addEventListener("dragover", allowDrop);
-  blockYard.addEventListener("drop", onDropBlockYard);
-  blockYard.addEventListener("dragenter", onDragEnterYard);
-  blockYard.addEventListener("dragleave", onDragLeaveYard);
-  blockYard.addEventListener("click", function(e) {
-    if (!e.target.closest(".block")) onZoneClick("yard");
-  });
-
-  // Start
   initGame();
 </script>
 
