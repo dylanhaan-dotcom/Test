@@ -34,52 +34,58 @@
       line-height: 1.4;
     }
 
-    /* === Budget bar === */
-    .budget-bar {
+    /* === Tracker bars === */
+    .tracker {
       width: 100%;
       max-width: 380px;
       background: #fff;
       border-radius: 10px;
       padding: 10px 16px;
-      margin: 0 16px 12px;
+      margin: 0 16px 6px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    .budget-header {
+    .tracker-header {
       display: flex;
       justify-content: space-between;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 600;
       color: #2c3e50;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
 
-    .budget-track {
+    .tracker-track {
       width: 100%;
-      height: 14px;
+      height: 12px;
       background: #ecf0f1;
-      border-radius: 7px;
+      border-radius: 6px;
       overflow: hidden;
     }
 
-    .budget-fill {
+    .tracker-fill {
       height: 100%;
-      border-radius: 7px;
-      background: #27ae60;
+      border-radius: 6px;
       transition: width 0.4s ease, background 0.4s ease;
     }
 
-    .budget-fill.warning { background: #f39c12; }
-    .budget-fill.over { background: #e74c3c; }
+    .fill-budget { background: #27ae60; }
+    .fill-budget.warning { background: #f39c12; }
+    .fill-budget.over { background: #e74c3c; }
 
-    .budget-remaining {
+    .fill-schedule { background: #3498db; }
+    .fill-schedule.warning { background: #f39c12; }
+    .fill-schedule.over { background: #e74c3c; }
+
+    .tracker-sub {
       text-align: right;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: #7f8c8d;
-      margin-top: 4px;
+      margin-top: 3px;
     }
 
-    /* === Stack (built house) === */
+    .tracker-sub.over-text { color: #e74c3c; font-weight: 600; }
+
+    /* === Stack === */
     .stack {
       width: 100%;
       max-width: 380px;
@@ -103,10 +109,10 @@
     .stacked-block {
       width: 100%;
       max-width: 360px;
-      padding: 7px 12px;
+      padding: 6px 10px;
       border-radius: 5px;
       font-weight: 600;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: #fff;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
       border: 2px solid rgba(0,0,0,0.1);
@@ -117,10 +123,11 @@
     }
 
     .stacked-block .tier-badge {
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       background: rgba(0,0,0,0.2);
-      padding: 2px 8px;
+      padding: 2px 6px;
       border-radius: 10px;
+      white-space: nowrap;
     }
 
     @keyframes slideIn {
@@ -128,7 +135,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* === Current trade bidding === */
+    /* === Bid section === */
     .bid-section {
       width: 100%;
       max-width: 380px;
@@ -157,7 +164,7 @@
     }
 
     .bid-card {
-      padding: 12px 14px;
+      padding: 10px 12px;
       border-radius: 8px;
       cursor: pointer;
       border: 2px solid rgba(0,0,0,0.08);
@@ -178,29 +185,36 @@
     .bid-card.med:hover { border-color: #3498db; }
     .bid-card.high:hover { border-color: #e67e22; }
 
-    .bid-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
+    .bid-info { display: flex; flex-direction: column; gap: 2px; }
 
     .bid-tier {
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: #2c3e50;
     }
 
     .bid-desc {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: #666;
       line-height: 1.3;
     }
 
+    .bid-right {
+      text-align: right;
+      margin-left: 10px;
+      flex-shrink: 0;
+    }
+
     .bid-price {
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.95rem;
       white-space: nowrap;
-      margin-left: 12px;
+    }
+
+    .bid-duration {
+      font-size: 0.68rem;
+      color: #888;
+      white-space: nowrap;
     }
 
     .bid-card.low .bid-price { color: #27ae60; }
@@ -211,7 +225,7 @@
     .results {
       display: none;
       width: 100%;
-      max-width: 380px;
+      max-width: 420px;
       padding: 16px;
       text-align: center;
     }
@@ -224,59 +238,174 @@
       margin-bottom: 6px;
     }
 
-    .result-icon {
-      font-size: 3rem;
-      margin-bottom: 4px;
-    }
+    .result-icon { font-size: 3rem; margin-bottom: 4px; }
 
     .result-summary {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #34495e;
       line-height: 1.5;
-      margin-bottom: 12px;
-    }
-
-    .quality-bar {
-      width: 100%;
-      height: 18px;
-      background: #ecf0f1;
-      border-radius: 9px;
-      overflow: hidden;
-      margin: 6px 0;
-    }
-
-    .quality-fill {
-      height: 100%;
-      border-radius: 9px;
-      transition: width 0.6s ease;
-    }
-
-    .quality-label {
-      font-size: 0.8rem;
-      color: #7f8c8d;
       margin-bottom: 10px;
     }
 
+    .quality-bar, .schedule-result-bar {
+      width: 100%;
+      height: 16px;
+      background: #ecf0f1;
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 4px 0;
+    }
+
+    .quality-fill, .schedule-result-fill {
+      height: 100%;
+      border-radius: 8px;
+      transition: width 0.6s ease;
+    }
+
+    .result-label {
+      font-size: 0.78rem;
+      color: #7f8c8d;
+      margin-bottom: 8px;
+    }
+
+    /* === Gantt chart === */
+    .gantt-section {
+      width: 100%;
+      margin-top: 14px;
+      text-align: left;
+    }
+
+    .gantt-section strong {
+      font-size: 0.85rem;
+      color: #2c3e50;
+    }
+
+    .gantt-header {
+      display: flex;
+      margin-top: 6px;
+      margin-bottom: 2px;
+      font-size: 0.6rem;
+      color: #999;
+    }
+
+    .gantt-label-col {
+      width: 110px;
+      flex-shrink: 0;
+    }
+
+    .gantt-bar-area {
+      flex: 1;
+      position: relative;
+    }
+
+    .gantt-month-markers {
+      display: flex;
+      position: relative;
+      height: 14px;
+    }
+
+    .gantt-month {
+      position: absolute;
+      font-size: 0.58rem;
+      color: #999;
+      transform: translateX(-50%);
+    }
+
+    .gantt-row {
+      display: flex;
+      align-items: center;
+      height: 18px;
+      margin-bottom: 2px;
+    }
+
+    .gantt-row-label {
+      width: 110px;
+      flex-shrink: 0;
+      font-size: 0.6rem;
+      color: #555;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-right: 6px;
+    }
+
+    .gantt-row-track {
+      flex: 1;
+      height: 14px;
+      position: relative;
+      background: #f5f5f5;
+      border-radius: 3px;
+    }
+
+    .gantt-bar {
+      position: absolute;
+      height: 100%;
+      border-radius: 3px;
+      opacity: 0.85;
+      min-width: 2px;
+    }
+
+    .gantt-deadline {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #e74c3c;
+      z-index: 5;
+    }
+
+    .gantt-deadline-label {
+      position: absolute;
+      top: -14px;
+      transform: translateX(-50%);
+      font-size: 0.55rem;
+      color: #e74c3c;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .gantt-total-row {
+      display: flex;
+      align-items: center;
+      margin-top: 4px;
+      padding-top: 4px;
+      border-top: 1px solid #ddd;
+    }
+
+    .gantt-total-label {
+      width: 110px;
+      flex-shrink: 0;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+
+    .gantt-total-value {
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    /* === Breakdown === */
     .breakdown {
       text-align: left;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: #555;
-      margin-top: 12px;
+      margin-top: 14px;
     }
 
     .breakdown-row {
       display: flex;
       justify-content: space-between;
-      padding: 4px 0;
+      padding: 3px 0;
       border-bottom: 1px solid #eee;
     }
 
-    .breakdown-row .tier-dot {
+    .tier-dot {
       display: inline-block;
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      margin-right: 6px;
+      margin-right: 5px;
       vertical-align: middle;
     }
 
@@ -284,7 +413,7 @@
     .tier-dot.med { background: #3498db; }
     .tier-dot.high { background: #e67e22; }
 
-    /* === Buttons === */
+    /* === Button === */
     button {
       padding: 10px 24px;
       border: none;
@@ -297,7 +426,7 @@
 
     button:active { transform: scale(0.96); }
 
-    .btn-reset { background: #e67e22; color: #fff; margin-top: 12px; }
+    .btn-reset { background: #e67e22; color: #fff; margin-top: 14px; }
     .btn-reset:hover { background: #cf6d17; }
   </style>
 </head>
@@ -305,19 +434,31 @@
 
 <h1>Build a House</h1>
 <p class="instructions">
-  You have a budget to build a house. For each trade, pick a low, standard, or
-  premium bid. Spend wisely — stay under budget while building the best home you can!
+  You have a <strong>$250K budget</strong> and a <strong>6-month deadline</strong>.
+  For each trade, pick Budget, Standard, or Premium. Budget is fast and cheap;
+  Premium is top quality but costs more and takes longer. Stay under budget and on schedule!
 </p>
 
-<div class="budget-bar">
-  <div class="budget-header">
+<div class="tracker" id="budgetTracker">
+  <div class="tracker-header">
     <span id="spent">Spent: $0</span>
     <span id="budgetTotal">Budget: $250,000</span>
   </div>
-  <div class="budget-track">
-    <div class="budget-fill" id="budgetFill" style="width: 0%"></div>
+  <div class="tracker-track">
+    <div class="tracker-fill fill-budget" id="budgetFill" style="width:0%"></div>
   </div>
-  <div class="budget-remaining" id="remaining">$250,000 remaining</div>
+  <div class="tracker-sub" id="budgetSub">$250,000 remaining</div>
+</div>
+
+<div class="tracker" id="scheduleTracker">
+  <div class="tracker-header">
+    <span id="scheduleUsed">Schedule: 0 weeks</span>
+    <span id="scheduleLimit">Deadline: 26 weeks</span>
+  </div>
+  <div class="tracker-track">
+    <div class="tracker-fill fill-schedule" id="scheduleFill" style="width:0%"></div>
+  </div>
+  <div class="tracker-sub" id="scheduleSub">26 weeks remaining</div>
 </div>
 
 <div class="stack" id="stack"></div>
@@ -329,126 +470,129 @@
 
 <script>
   const BUDGET = 250000;
+  const DEADLINE_WEEKS = 26; // 6 months
 
+  // Phases group trades that run in parallel.
+  // phase: trades in the same phase overlap (duration = max of their durations)
   const TRADES = [
     {
-      name: "Site Preparation & Excavation", color: "#8B6914", icon: "\u{1F6DC}",
+      name: "Site Preparation & Excavation", color: "#8B6914", icon: "\u{1F6DC}", phase: 0,
       bids: [
-        { tier: "Budget", price: 8000,  desc: "Basic clearing, minimal grading" },
-        { tier: "Standard", price: 15000, desc: "Full grading, soil testing, proper drainage" },
-        { tier: "Premium", price: 25000,  desc: "Engineered site plan, tree preservation, retaining walls" },
+        { tier: "Budget",   price: 8000,  weeks: 1,   desc: "Basic clearing, minimal grading" },
+        { tier: "Standard", price: 15000, weeks: 1.5, desc: "Full grading, soil testing, proper drainage" },
+        { tier: "Premium",  price: 25000, weeks: 3,   desc: "Engineered site plan, tree preservation, retaining walls" },
       ]
     },
     {
-      name: "Foundation & Concrete", color: "#7F8C8D", icon: "\u{1F9F1}",
+      name: "Foundation & Concrete", color: "#7F8C8D", icon: "\u{1F9F1}", phase: 1,
       bids: [
-        { tier: "Budget", price: 15000, desc: "Basic slab-on-grade foundation" },
-        { tier: "Standard", price: 25000, desc: "Reinforced slab with moisture barrier" },
-        { tier: "Premium", price: 42000, desc: "Full basement with waterproofing and drainage" },
+        { tier: "Budget",   price: 15000, weeks: 1.5, desc: "Basic slab-on-grade foundation" },
+        { tier: "Standard", price: 25000, weeks: 2.5, desc: "Reinforced slab with moisture barrier" },
+        { tier: "Premium",  price: 42000, weeks: 4,   desc: "Full basement with waterproofing and drainage" },
       ]
     },
     {
-      name: "Framing", color: "#C0792A", icon: "\u{1FA9A}",
+      name: "Framing", color: "#C0792A", icon: "\u{1FA9A}", phase: 2,
       bids: [
-        { tier: "Budget", price: 20000, desc: "Standard lumber, basic roof trusses" },
-        { tier: "Standard", price: 35000, desc: "Engineered lumber, raised ceilings" },
-        { tier: "Premium", price: 52000, desc: "Steel-reinforced, open floor plan, vaulted ceilings" },
+        { tier: "Budget",   price: 20000, weeks: 2,   desc: "Standard lumber, basic roof trusses" },
+        { tier: "Standard", price: 35000, weeks: 3,   desc: "Engineered lumber, raised ceilings" },
+        { tier: "Premium",  price: 52000, weeks: 4.5, desc: "Steel-reinforced, open floor plan, vaulted ceilings" },
       ]
     },
     {
-      name: "Roofing", color: "#6C3483", icon: "\u{1F3E0}",
+      name: "Roofing", color: "#6C3483", icon: "\u{1F3E0}", phase: 3,
       bids: [
-        { tier: "Budget", price: 7000,  desc: "3-tab asphalt shingles, 20-year warranty" },
-        { tier: "Standard", price: 14000, desc: "Architectural shingles, 30-year warranty" },
-        { tier: "Premium", price: 28000, desc: "Standing seam metal roof, 50-year warranty" },
+        { tier: "Budget",   price: 7000,  weeks: 1,   desc: "3-tab asphalt shingles, 20-year warranty" },
+        { tier: "Standard", price: 14000, weeks: 1.5, desc: "Architectural shingles, 30-year warranty" },
+        { tier: "Premium",  price: 28000, weeks: 2.5, desc: "Standing seam metal roof, 50-year warranty" },
       ]
     },
     {
-      name: "Windows & Exterior Doors", color: "#2980B9", icon: "\u{1FA9F}",
+      name: "Windows & Exterior Doors", color: "#2980B9", icon: "\u{1FA9F}", phase: 3,
       bids: [
-        { tier: "Budget", price: 6000,  desc: "Single-pane vinyl, builder-grade doors" },
-        { tier: "Standard", price: 14000, desc: "Double-pane low-E, fiberglass entry door" },
-        { tier: "Premium", price: 26000, desc: "Triple-pane, custom sizes, solid wood entry" },
+        { tier: "Budget",   price: 6000,  weeks: 0.5, desc: "Single-pane vinyl, builder-grade doors" },
+        { tier: "Standard", price: 14000, weeks: 1,   desc: "Double-pane low-E, fiberglass entry door" },
+        { tier: "Premium",  price: 26000, weeks: 2.5, desc: "Triple-pane, custom sizes, solid wood entry" },
       ]
     },
     {
-      name: "Plumbing Rough-In", color: "#1ABC9C", icon: "\u{1F6BF}",
+      name: "Plumbing Rough-In", color: "#1ABC9C", icon: "\u{1F6BF}", phase: 4,
       bids: [
-        { tier: "Budget", price: 8000,  desc: "PVC supply lines, basic fixture layout" },
-        { tier: "Standard", price: 15000, desc: "PEX piping, standard fixture prep, hose bibs" },
-        { tier: "Premium", price: 24000, desc: "PEX with manifold, recirculating hot water, gas lines" },
+        { tier: "Budget",   price: 8000,  weeks: 1,   desc: "PVC supply lines, basic fixture layout" },
+        { tier: "Standard", price: 15000, weeks: 1.5, desc: "PEX piping, standard fixture prep, hose bibs" },
+        { tier: "Premium",  price: 24000, weeks: 2.5, desc: "PEX with manifold, recirculating hot water, gas lines" },
       ]
     },
     {
-      name: "Electrical Rough-In", color: "#F39C12", icon: "\u26A1",
+      name: "Electrical Rough-In", color: "#F39C12", icon: "\u26A1", phase: 4,
       bids: [
-        { tier: "Budget", price: 7000,  desc: "Code-minimum outlets, basic 100-amp panel" },
-        { tier: "Standard", price: 13000, desc: "200-amp panel, USB outlets, wired for ceiling fans" },
-        { tier: "Premium", price: 22000, desc: "Smart panel, pre-wired for EV charger, whole-home surge" },
+        { tier: "Budget",   price: 7000,  weeks: 1,   desc: "Code-minimum outlets, basic 100-amp panel" },
+        { tier: "Standard", price: 13000, weeks: 1.5, desc: "200-amp panel, USB outlets, wired for ceiling fans" },
+        { tier: "Premium",  price: 22000, weeks: 2,   desc: "Smart panel, pre-wired for EV charger, whole-home surge" },
       ]
     },
     {
-      name: "HVAC", color: "#5DADE2", icon: "\u2744\uFE0F",
+      name: "HVAC", color: "#5DADE2", icon: "\u2744\uFE0F", phase: 4,
       bids: [
-        { tier: "Budget", price: 6000,  desc: "Basic single-stage furnace and AC" },
-        { tier: "Standard", price: 13000, desc: "Two-stage system, programmable thermostat, zoned" },
-        { tier: "Premium", price: 24000, desc: "Variable-speed heat pump, smart thermostat, dual-zone" },
+        { tier: "Budget",   price: 6000,  weeks: 1,   desc: "Basic single-stage furnace and AC" },
+        { tier: "Standard", price: 13000, weeks: 1.5, desc: "Two-stage system, programmable thermostat, zoned" },
+        { tier: "Premium",  price: 24000, weeks: 2.5, desc: "Variable-speed heat pump, smart thermostat, dual-zone" },
       ]
     },
     {
-      name: "Insulation", color: "#E91E8B", icon: "\u{1F9E4}",
+      name: "Insulation", color: "#E91E8B", icon: "\u{1F9E4}", phase: 5,
       bids: [
-        { tier: "Budget", price: 3000,  desc: "Fiberglass batts, code-minimum R-value" },
-        { tier: "Standard", price: 6500,  desc: "Blown-in fiberglass, improved R-value, air sealing" },
-        { tier: "Premium", price: 14000, desc: "Closed-cell spray foam, exceeds code, air-tight" },
+        { tier: "Budget",   price: 3000,  weeks: 0.5, desc: "Fiberglass batts, code-minimum R-value" },
+        { tier: "Standard", price: 6500,  weeks: 1,   desc: "Blown-in fiberglass, improved R-value, air sealing" },
+        { tier: "Premium",  price: 14000, weeks: 2,   desc: "Closed-cell spray foam, exceeds code, air-tight" },
       ]
     },
     {
-      name: "Drywall", color: "#BDC3C7", icon: "\u{1F9F1}",
+      name: "Drywall", color: "#BDC3C7", icon: "\u{1F9F1}", phase: 6,
       bids: [
-        { tier: "Budget", price: 7000,  desc: "Standard drywall, level 3 finish" },
-        { tier: "Standard", price: 11000, desc: "Moisture-resistant in baths, level 4 finish" },
-        { tier: "Premium", price: 18000, desc: "Soundproof drywall, level 5 finish throughout" },
+        { tier: "Budget",   price: 7000,  weeks: 1.5, desc: "Standard drywall, level 3 finish" },
+        { tier: "Standard", price: 11000, weeks: 2,   desc: "Moisture-resistant in baths, level 4 finish" },
+        { tier: "Premium",  price: 18000, weeks: 3,   desc: "Soundproof drywall, level 5 finish throughout" },
       ]
     },
     {
-      name: "Interior Finishes & Paint", color: "#E74C3C", icon: "\u{1F3A8}",
+      name: "Interior Finishes & Paint", color: "#E74C3C", icon: "\u{1F3A8}", phase: 7,
       bids: [
-        { tier: "Budget", price: 8000,  desc: "Builder-grade trim, flat paint, basic hardware" },
-        { tier: "Standard", price: 18000, desc: "Craftsman trim, satin paint, brushed nickel hardware" },
-        { tier: "Premium", price: 35000, desc: "Custom millwork, designer paint, premium fixtures" },
+        { tier: "Budget",   price: 8000,  weeks: 1.5, desc: "Builder-grade trim, flat paint, basic hardware" },
+        { tier: "Standard", price: 18000, weeks: 2.5, desc: "Craftsman trim, satin paint, brushed nickel hardware" },
+        { tier: "Premium",  price: 35000, weeks: 4,   desc: "Custom millwork, designer paint, premium fixtures" },
       ]
     },
     {
-      name: "Flooring", color: "#AF601A", icon: "\u{1FA9A}",
+      name: "Flooring", color: "#AF601A", icon: "\u{1FA9A}", phase: 7,
       bids: [
-        { tier: "Budget", price: 5000,  desc: "Vinyl plank and basic carpet" },
-        { tier: "Standard", price: 13000, desc: "LVP throughout, tile in wet areas, upgraded carpet" },
-        { tier: "Premium", price: 26000, desc: "Hardwood floors, porcelain tile, heated bath floors" },
+        { tier: "Budget",   price: 5000,  weeks: 1,   desc: "Vinyl plank and basic carpet" },
+        { tier: "Standard", price: 13000, weeks: 1.5, desc: "LVP throughout, tile in wet areas, upgraded carpet" },
+        { tier: "Premium",  price: 26000, weeks: 3,   desc: "Hardwood floors, porcelain tile, heated bath floors" },
       ]
     },
     {
-      name: "Cabinets & Countertops", color: "#884EA0", icon: "\u{1F5C4}\uFE0F",
+      name: "Cabinets & Countertops", color: "#884EA0", icon: "\u{1F5C4}\uFE0F", phase: 8,
       bids: [
-        { tier: "Budget", price: 8000,  desc: "Stock cabinets, laminate countertops" },
-        { tier: "Standard", price: 18000, desc: "Semi-custom cabinets, quartz countertops" },
-        { tier: "Premium", price: 38000, desc: "Custom cabinetry, waterfall island, premium stone" },
+        { tier: "Budget",   price: 8000,  weeks: 1,   desc: "Stock cabinets, laminate countertops" },
+        { tier: "Standard", price: 18000, weeks: 2,   desc: "Semi-custom cabinets, quartz countertops" },
+        { tier: "Premium",  price: 38000, weeks: 4,   desc: "Custom cabinetry, waterfall island, premium stone" },
       ]
     },
     {
-      name: "Final Plumbing & Electrical", color: "#17A589", icon: "\u{1F4A1}",
+      name: "Final Plumbing & Electrical", color: "#17A589", icon: "\u{1F4A1}", phase: 9,
       bids: [
-        { tier: "Budget", price: 5000,  desc: "Builder-grade fixtures, basic lighting" },
-        { tier: "Standard", price: 11000, desc: "Quality fixtures, recessed lighting, dimmer switches" },
-        { tier: "Premium", price: 22000, desc: "Designer fixtures, smart lighting, steam shower" },
+        { tier: "Budget",   price: 5000,  weeks: 0.5, desc: "Builder-grade fixtures, basic lighting" },
+        { tier: "Standard", price: 11000, weeks: 1,   desc: "Quality fixtures, recessed lighting, dimmer switches" },
+        { tier: "Premium",  price: 22000, weeks: 2,   desc: "Designer fixtures, smart lighting, steam shower" },
       ]
     },
     {
-      name: "Landscaping & Exterior", color: "#27AE60", icon: "\u{1F333}",
+      name: "Landscaping & Exterior", color: "#27AE60", icon: "\u{1F333}", phase: 10,
       bids: [
-        { tier: "Budget", price: 5000,  desc: "Basic sod, gravel driveway, no fence" },
-        { tier: "Standard", price: 15000, desc: "Lawn, concrete driveway, patio, basic planting" },
-        { tier: "Premium", price: 32000, desc: "Designed landscape, pavers, deck, irrigation, fencing" },
+        { tier: "Budget",   price: 5000,  weeks: 1,   desc: "Basic sod, gravel driveway, no fence" },
+        { tier: "Standard", price: 15000, weeks: 2,   desc: "Lawn, concrete driveway, patio, basic planting" },
+        { tier: "Premium",  price: 32000, weeks: 3.5, desc: "Designed landscape, pavers, deck, irrigation, fencing" },
       ]
     },
   ];
@@ -461,31 +605,61 @@
     return "$" + n.toLocaleString();
   }
 
+  // Calculate total schedule from selections so far, accounting for parallel phases
+  function calcSchedule(sels) {
+    // Group selected trades by phase
+    const phaseMax = {};
+    sels.forEach(s => {
+      const p = s.trade.phase;
+      const w = s.bid.weeks;
+      if (!phaseMax[p] || w > phaseMax[p]) phaseMax[p] = w;
+    });
+    // Total = sum of phase maximums (phases are sequential, trades within a phase are parallel)
+    return Object.values(phaseMax).reduce((sum, w) => sum + w, 0);
+  }
+
   function updateBudgetBar() {
     const pct = Math.min((totalSpent / BUDGET) * 100, 100);
     const fill = document.getElementById("budgetFill");
     fill.style.width = pct + "%";
-    fill.className = "budget-fill";
+    fill.className = "tracker-fill fill-budget";
     if (totalSpent > BUDGET) fill.classList.add("over");
     else if (pct > 75) fill.classList.add("warning");
 
     document.getElementById("spent").textContent = "Spent: " + formatMoney(totalSpent);
     const left = BUDGET - totalSpent;
-    document.getElementById("remaining").textContent = left >= 0
+    const sub = document.getElementById("budgetSub");
+    sub.textContent = left >= 0
       ? formatMoney(left) + " remaining"
       : formatMoney(Math.abs(left)) + " OVER BUDGET";
-    document.getElementById("remaining").style.color = left >= 0 ? "#7f8c8d" : "#e74c3c";
+    sub.className = left >= 0 ? "tracker-sub" : "tracker-sub over-text";
+  }
+
+  function updateScheduleBar() {
+    const weeks = calcSchedule(selections);
+    const pct = Math.min((weeks / DEADLINE_WEEKS) * 100, 100);
+    const fill = document.getElementById("scheduleFill");
+    fill.style.width = pct + "%";
+    fill.className = "tracker-fill fill-schedule";
+    if (weeks > DEADLINE_WEEKS) fill.classList.add("over");
+    else if (pct > 75) fill.classList.add("warning");
+
+    document.getElementById("scheduleUsed").textContent = "Schedule: " + weeks + " weeks";
+    const left = DEADLINE_WEEKS - weeks;
+    const sub = document.getElementById("scheduleSub");
+    sub.textContent = left >= 0
+      ? left + " weeks remaining"
+      : Math.abs(left) + " weeks OVER DEADLINE";
+    sub.className = left >= 0 ? "tracker-sub" : "tracker-sub over-text";
   }
 
   function addStackBlock(trade, bid) {
     const el = document.createElement("div");
     el.className = "stacked-block";
     el.style.background = trade.color;
-
-    const tierClass = bid.tier === "Budget" ? "low" : bid.tier === "Standard" ? "med" : "high";
     el.innerHTML = `
-      <span><span class="block-icon">${trade.icon}</span> ${trade.name}</span>
-      <span class="tier-badge">${bid.tier} ${formatMoney(bid.price)}</span>
+      <span>${trade.icon} ${trade.name}</span>
+      <span class="tier-badge">${bid.tier} &middot; ${formatMoney(bid.price)} &middot; ${bid.weeks}w</span>
     `;
     document.getElementById("stack").appendChild(el);
   }
@@ -500,10 +674,19 @@
     }
 
     const trade = TRADES[currentStep];
+    // Check if this trade runs in parallel with another
+    const parallelNames = TRADES
+      .filter(t => t.phase === trade.phase && t.name !== trade.name)
+      .map(t => t.name);
+    const parallelNote = parallelNames.length > 0
+      ? `<div class="trade-step" style="color:#3498db">Runs parallel with: ${parallelNames.join(", ")}</div>`
+      : "";
+
     section.innerHTML = `
       <div class="trade-label">
         ${trade.icon} ${trade.name}
         <div class="trade-step">Trade ${currentStep + 1} of ${TRADES.length}</div>
+        ${parallelNote}
       </div>
       <div class="bid-options">
         ${trade.bids.map((bid, i) => {
@@ -514,7 +697,10 @@
                 <div class="bid-tier">${bid.tier}</div>
                 <div class="bid-desc">${bid.desc}</div>
               </div>
-              <div class="bid-price">${formatMoney(bid.price)}</div>
+              <div class="bid-right">
+                <div class="bid-price">${formatMoney(bid.price)}</div>
+                <div class="bid-duration">${bid.weeks} week${bid.weeks !== 1 ? "s" : ""}</div>
+              </div>
             </div>
           `;
         }).join("")}
@@ -530,69 +716,184 @@
     selections.push({ trade, bid, bidIndex });
 
     updateBudgetBar();
+    updateScheduleBar();
     addStackBlock(trade, bid);
 
     currentStep++;
     showCurrentTrade();
   }
 
+  // Build Gantt chart data
+  function buildGanttData() {
+    const rows = [];
+    const phaseMax = {};
+    const phaseStart = {};
+
+    // First pass: find max duration per phase
+    selections.forEach(s => {
+      const p = s.trade.phase;
+      if (!phaseMax[p] || s.bid.weeks > phaseMax[p]) phaseMax[p] = s.bid.weeks;
+    });
+
+    // Second pass: compute start of each phase (sequential)
+    const phases = [...new Set(selections.map(s => s.trade.phase))].sort((a, b) => a - b);
+    let cursor = 0;
+    phases.forEach(p => {
+      phaseStart[p] = cursor;
+      cursor += phaseMax[p];
+    });
+
+    // Build rows
+    selections.forEach(s => {
+      rows.push({
+        name: s.trade.name,
+        icon: s.trade.icon,
+        color: s.trade.color,
+        start: phaseStart[s.trade.phase],
+        duration: s.bid.weeks,
+        tier: s.bid.tier,
+      });
+    });
+
+    return { rows, totalWeeks: cursor };
+  }
+
+  function renderGantt(container) {
+    const { rows, totalWeeks } = buildGanttData();
+    const chartMax = Math.max(totalWeeks, DEADLINE_WEEKS) + 2;
+
+    // Month markers (every 4 weeks)
+    let monthMarkers = "";
+    for (let w = 0; w <= chartMax; w += 4) {
+      const left = (w / chartMax) * 100;
+      const month = Math.round(w / 4.33);
+      monthMarkers += `<span class="gantt-month" style="left:${left}%">M${month}</span>`;
+    }
+
+    // Deadline line position
+    const deadlinePct = (DEADLINE_WEEKS / chartMax) * 100;
+
+    let rowsHTML = rows.map(r => {
+      const left = (r.start / chartMax) * 100;
+      const width = (r.duration / chartMax) * 100;
+      return `
+        <div class="gantt-row">
+          <div class="gantt-row-label">${r.icon} ${r.name}</div>
+          <div class="gantt-row-track">
+            <div class="gantt-bar" style="left:${left}%;width:${width}%;background:${r.color}"></div>
+            <div class="gantt-deadline" style="left:${deadlinePct}%"></div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    const onTime = totalWeeks <= DEADLINE_WEEKS;
+    const totalColor = onTime ? "#27ae60" : "#e74c3c";
+
+    container.innerHTML = `
+      <strong>Construction Schedule (Gantt Chart)</strong>
+      <div class="gantt-header">
+        <div class="gantt-label-col"></div>
+        <div class="gantt-bar-area">
+          <div class="gantt-month-markers">${monthMarkers}
+            <div class="gantt-deadline" style="left:${deadlinePct}%">
+              <span class="gantt-deadline-label">Deadline</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      ${rowsHTML}
+      <div class="gantt-total-row">
+        <div class="gantt-total-label">Total Duration</div>
+        <div class="gantt-total-value" style="color:${totalColor}">
+          ${totalWeeks} weeks ${onTime ? "(on time!)" : "(" + (totalWeeks - DEADLINE_WEEKS) + "w over deadline)"}
+        </div>
+      </div>
+    `;
+  }
+
   function showResults() {
     const results = document.getElementById("results");
+    const totalWeeks = calcSchedule(selections);
     const underBudget = totalSpent <= BUDGET;
+    const onTime = totalWeeks <= DEADLINE_WEEKS;
 
-    // Quality score: 0 for budget, 1 for standard, 2 for premium
     const qualityPoints = selections.reduce((sum, s) => sum + s.bidIndex, 0);
     const maxPoints = TRADES.length * 2;
     const qualityPct = Math.round((qualityPoints / maxPoints) * 100);
 
     let qualityColor, qualityLabel, icon, message;
-    if (qualityPct >= 75) {
-      qualityColor = "#e67e22"; qualityLabel = "Luxury Build";
-      icon = "\u{1F3F0}"; message = "Top-of-the-line finishes throughout!";
-    } else if (qualityPct >= 50) {
-      qualityColor = "#3498db"; qualityLabel = "Quality Build";
-      icon = "\u{1F3E1}"; message = "A well-built home with great features.";
-    } else if (qualityPct >= 25) {
-      qualityColor = "#27ae60"; qualityLabel = "Solid Build";
-      icon = "\u{1F3E0}"; message = "A practical home that gets the job done.";
+    if (!underBudget && !onTime) {
+      icon = "\u{1F6A8}"; message = "Over budget AND over schedule. Back to the drawing board!";
+    } else if (!underBudget) {
+      icon = "\u{1F4B8}"; message = "Great schedule, but you blew the budget!";
+    } else if (!onTime) {
+      icon = "\u23F0"; message = "Under budget, but your client is still waiting to move in!";
+    } else if (qualityPct >= 70) {
+      icon = "\u{1F3F0}"; message = "Luxury build, on time, under budget. Nailed it!";
+    } else if (qualityPct >= 45) {
+      icon = "\u{1F3E1}"; message = "A quality home delivered on time and under budget!";
+    } else if (qualityPct >= 20) {
+      icon = "\u{1F3E0}"; message = "Solid build with smart budget management.";
     } else {
-      qualityColor = "#95a5a6"; qualityLabel = "Basic Build";
-      icon = "\u{1F3DA}\uFE0F"; message = "It's a roof over your head!";
+      icon = "\u{1F3DA}\uFE0F"; message = "Basic but it's done fast and cheap!";
     }
 
+    if (qualityPct >= 70) { qualityColor = "#e67e22"; qualityLabel = "Luxury"; }
+    else if (qualityPct >= 45) { qualityColor = "#3498db"; qualityLabel = "Quality"; }
+    else if (qualityPct >= 20) { qualityColor = "#27ae60"; qualityLabel = "Solid"; }
+    else { qualityColor = "#95a5a6"; qualityLabel = "Basic"; }
+
     const budgetMsg = underBudget
-      ? `You came in at <strong>${formatMoney(totalSpent)}</strong> — <strong>${formatMoney(BUDGET - totalSpent)}</strong> under budget!`
-      : `You spent <strong>${formatMoney(totalSpent)}</strong> — <strong style="color:#e74c3c">${formatMoney(totalSpent - BUDGET)} over budget!</strong>`;
+      ? `<strong>${formatMoney(totalSpent)}</strong> spent &mdash; <strong>${formatMoney(BUDGET - totalSpent)} under budget</strong>`
+      : `<strong>${formatMoney(totalSpent)}</strong> spent &mdash; <strong style="color:#e74c3c">${formatMoney(totalSpent - BUDGET)} over budget</strong>`;
+
+    const scheduleMsg = onTime
+      ? `<strong>${totalWeeks} weeks</strong> &mdash; <strong>${DEADLINE_WEEKS - totalWeeks} weeks ahead of schedule</strong>`
+      : `<strong>${totalWeeks} weeks</strong> &mdash; <strong style="color:#e74c3c">${totalWeeks - DEADLINE_WEEKS} weeks past deadline</strong>`;
 
     let breakdownHTML = selections.map(s => {
       const tierClass = s.bidIndex === 0 ? "low" : s.bidIndex === 1 ? "med" : "high";
       return `
         <div class="breakdown-row">
           <span><span class="tier-dot ${tierClass}"></span>${s.trade.icon} ${s.trade.name}</span>
-          <span>${s.bid.tier} — ${formatMoney(s.bid.price)}</span>
+          <span>${s.bid.tier} &middot; ${formatMoney(s.bid.price)} &middot; ${s.bid.weeks}w</span>
         </div>
       `;
     }).join("");
 
+    const schedulePct = Math.min(Math.round((totalWeeks / DEADLINE_WEEKS) * 100), 100);
+    const scheduleBarColor = onTime ? "#3498db" : "#e74c3c";
+
     results.innerHTML = `
       <div class="result-icon">${icon}</div>
-      <h2>${underBudget ? "Build Complete!" : "Over Budget!"}</h2>
-      <div class="result-summary">${message}<br>${budgetMsg}</div>
-      <div class="quality-label">Build Quality: ${qualityPct}% — ${qualityLabel}</div>
+      <h2>${underBudget && onTime ? "Build Complete!" : underBudget ? "Over Schedule!" : onTime ? "Over Budget!" : "Over Budget & Schedule!"}</h2>
+      <div class="result-summary">${message}</div>
+
+      <div class="result-label">Budget: ${budgetMsg}</div>
+      <div class="result-label">Schedule: ${scheduleMsg}</div>
+
+      <div class="result-label" style="margin-top:10px">Build Quality: ${qualityPct}% &mdash; ${qualityLabel}</div>
       <div class="quality-bar">
-        <div class="quality-fill" style="width: ${qualityPct}%; background: ${qualityColor}"></div>
+        <div class="quality-fill" style="width:${qualityPct}%;background:${qualityColor}"></div>
       </div>
+
+      <div class="gantt-section" id="ganttChart"></div>
+
       <div class="breakdown">
-        <strong>Cost Breakdown</strong>
+        <strong>Cost & Schedule Breakdown</strong>
         ${breakdownHTML}
-        <div class="breakdown-row" style="font-weight:700; border-top: 2px solid #ccc; margin-top:4px; padding-top:6px;">
+        <div class="breakdown-row" style="font-weight:700; border-top:2px solid #ccc; margin-top:4px; padding-top:6px;">
           <span>Total</span>
-          <span>${formatMoney(totalSpent)}</span>
+          <span>${formatMoney(totalSpent)} &middot; ${totalWeeks}w</span>
         </div>
       </div>
       <button class="btn-reset" onclick="resetGame()">Play Again</button>
     `;
     results.classList.add("show");
+
+    // Render Gantt after DOM is updated
+    renderGantt(document.getElementById("ganttChart"));
   }
 
   function resetGame() {
@@ -603,11 +904,13 @@
     document.getElementById("results").innerHTML = "";
     document.getElementById("results").classList.remove("show");
     updateBudgetBar();
+    updateScheduleBar();
     showCurrentTrade();
   }
 
   // Start
   updateBudgetBar();
+  updateScheduleBar();
   showCurrentTrade();
 </script>
 
