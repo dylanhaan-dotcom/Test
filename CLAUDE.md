@@ -4,68 +4,63 @@ This file provides guidance for AI assistants working with this repository.
 
 ## Repository Overview
 
-This is the **Test** repository (`dylanhaan-dotcom/Test`). It is currently in its initial setup phase with no application code yet.
+**Build a House** — a browser-based educational block-stacking game. Players drag and drop blocks labeled with construction trades (e.g., Foundation, Framing, Roofing) and stack them in the correct order to build a house.
+
+Repository: `dylanhaan-dotcom/Test`
 
 ## Project Structure
 
 ```
 /
-├── CLAUDE.md          # AI assistant guidance (this file)
-└── .git/              # Git repository
+├── CLAUDE.md       # AI assistant guidance (this file)
+├── index.html      # Complete game — HTML, CSS, and JavaScript in a single file
+└── .git/
 ```
 
-> Update this section as the project grows with source directories, config files, and other assets.
+## Tech Stack
+
+- **Vanilla HTML/CSS/JavaScript** — no frameworks, no build step, no dependencies
+- Single-file architecture: everything lives in `index.html`
 
 ## Development Setup
 
-No build tools or dependencies are configured yet. When they are added, document:
+1. No install needed — just open `index.html` in a browser
+2. Any modern browser with ES6 support works (Chrome, Firefox, Safari, Edge)
 
-- Language and runtime version requirements
-- How to install dependencies
-- Environment variables or secrets needed
+## How the Game Works
 
-## Common Commands
+- **15 construction trade blocks** are shuffled in the "Block Yard"
+- Players drag blocks to the "Build Site" and stack them bottom-to-top
+- **Check Order** validates placement; correct blocks get green borders, wrong ones shake red
+- **Hint** reveals which trade belongs in the first incorrect position
+- **Reset** shuffles and restarts
+- Tracks number of attempts
 
-<!-- Add commands as the project develops, for example: -->
-<!-- - `npm install` / `pip install -r requirements.txt` — Install dependencies -->
-<!-- - `npm run build` / `make build` — Build the project -->
-<!-- - `npm test` / `pytest` — Run tests -->
-<!-- - `npm run lint` / `ruff check .` — Run linter -->
-<!-- - `npm run format` / `ruff format .` — Format code -->
+### Correct Build Order (bottom to top)
 
-No commands configured yet.
+1. Site Preparation & Excavation
+2. Foundation & Concrete
+3. Framing
+4. Roofing
+5. Windows & Exterior Doors
+6. Plumbing Rough-In
+7. Electrical Rough-In
+8. HVAC
+9. Insulation
+10. Drywall
+11. Interior Finishes & Paint
+12. Flooring
+13. Cabinets & Countertops
+14. Final Plumbing & Electrical
+15. Landscaping & Exterior
 
-## Testing
+## Code Conventions
 
-No test framework is configured yet. When tests are added, document:
-
-- How to run the full test suite
-- How to run a single test file or specific test
-- Any test conventions (file naming, directory structure)
-
-## Code Style and Conventions
-
-No linter or formatter is configured yet. When they are added, document:
-
-- Linting and formatting tools in use
-- How to run them
-- Key style rules or project-specific conventions
-
-## Architecture
-
-No application architecture exists yet. When code is added, document:
-
-- High-level architecture and module responsibilities
-- Key design patterns in use
-- Data flow and entry points
-
-## CI/CD
-
-No CI/CD pipeline is configured yet. When one is added, document:
-
-- What checks run on PRs
-- Deployment process
-- Branch protection rules
+- All code is in a single `index.html` file (inline `<style>` and `<script>`)
+- CSS uses a mobile-friendly layout with flexbox
+- Drag-and-drop uses the native HTML5 Drag and Drop API with touch fallbacks
+- Colors are assigned per trade for visual distinction
+- No external dependencies or CDN links
 
 ## Git Workflow
 
@@ -76,7 +71,7 @@ No CI/CD pipeline is configured yet. When one is added, document:
 ## Important Notes for AI Assistants
 
 - Read existing code before proposing changes
-- Run tests (when available) before and after making changes
-- Do not introduce unnecessary dependencies
-- Keep changes focused and minimal — avoid unrelated refactors
-- Follow existing code style and patterns established in the project
+- This is a zero-dependency project — avoid adding frameworks or libraries unless explicitly requested
+- Touch support is implemented alongside desktop drag-and-drop; keep both paths working
+- The `TRADES` array defines game content and order — modify it to add/remove/reorder trades
+- Test in a browser after making changes (no automated test suite)
